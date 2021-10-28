@@ -1,0 +1,72 @@
+{% extends 'add_data_base.html' %}
+{% block title%} <h1>Simple CRM / Add Investment Project  </h1> {% endblock %}
+{% block action %}
+    <h2> Please fill in new investment project data</h2>
+
+{% endblock %}
+
+{% block form %}
+    <form>
+        <table>
+            <tbody>
+                    <tr>
+                        <td> <label for="name">Name: </label></td>
+                        <td><input type="text" id="name" name="name"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="city">City :</label></td>
+                        <td> <input type="text" id="city" name="city"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="address">Address :</label></td>
+                        <td> <input type="text" id="address" name="address"></td>
+                    </tr>
+                    <tr>
+                        <td> <p>District :</p></td>
+                        <td>  <input type="radio" id="center area" name="district" value="ca">
+                            <label for="center area"> center area </label>
+                            <input type="radio" id="sub urban" name="district" value="su">
+                            <label for="sub urban"> sub urban </label>
+                            <input type="radio" id="business district" name="district" value="bd">
+                            <label for="business district"> business district </label>
+                            <input type="radio" id="midtown" name="district" value="mt">
+                            <label for="midtown"> midtown </label>
+                            <input type="radio" id="outer center area" name="district" value="oca">
+                            <label for="outer center area"> outer center area </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="specification">Specifiaction :</label></td>
+                        <td><input type="text" id="specification" name="specification"></td>
+                    </tr>
+                    <tr>
+                        <td> <label for="number of apartments">Number of apartments:</label></td>
+                        <td> <input type="number" id="number of apartments" name="number od apartments"></td>
+                    </tr>
+                    <tr>
+                        <td> <label for="start date"> Construction start date :</label></td>
+                        <td> <input type="date" id="start date" name="start date"> </td>
+                    </tr>
+                     <tr>
+                        <td> <label for="finnish date"> Construction end date :</label></td>
+                        <td> <input type="date" id="finnish date" name="finnish date"> </td>
+                    </tr>
+
+                    <tr>
+                        <td> <button type="submit"> Submit </button> <button type="reset" > Reset! </button></td>
+
+                    </tr>
+
+
+            </tbody>
+        </table>
+    </form>
+{% endblock %}
+
+
+
+
+
+
+
+
