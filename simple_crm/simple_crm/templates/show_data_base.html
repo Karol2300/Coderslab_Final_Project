@@ -3,22 +3,13 @@
 <head>
     <meta charset="UTF-8" >
     <title>{% block title %} Simpe CRM {% endblock %}</title>
-
 </head>
-<body>
-    <table>
-        <tbody>
-            <tr>
-                <td> {% block action %} Action Name {% endblock %}</td>
-                <td> {% block second_action %} Second Action Name {% endblock %} </td>
-            </tr>
-        </tbody>
-    </table>
-    <table>
-        <tbody>
-            <tr> {% block info %} info  {% endblock %} </tr>
-        </tbody>
-    </table>
+
+
+                 {% block action %} Action Name {% endblock %}
+                 {% block second_action %} Second Action Name {% endblock %}
+
+             {% block info %} info  {% endblock %}
 
 
 </body>

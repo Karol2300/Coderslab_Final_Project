@@ -16,6 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from crm.views import AddClient,AddSalesPerson,ShowClient
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('index/', AddClient.as_view()),
+    path('addSalesPerson/', AddSalesPerson.as_view()),
+    path('showClient/', ShowClient.as_view()),
+
 ]
