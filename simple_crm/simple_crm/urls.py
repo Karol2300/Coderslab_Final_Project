@@ -16,12 +16,24 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from crm.views import AddClient,AddSalesPerson,ShowClient
+from cstmgmnt.views import AddClient,AddSalesPerson,ShowClientData,ShowClient,ShowSalesPerson, ShowSalesPersonData
+from reports.views import AddProduct, AddInvestmentProject, AddPricingPlan, ShowProduct, ShowProductData
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', AddClient.as_view()),
     path('addSalesPerson/', AddSalesPerson.as_view()),
+    path('showSalesPerson/', ShowSalesPerson.as_view()),
+    path('showSalesPerson/<str:salesperson_id>/', ShowSalesPersonData.as_view()),
+    path('addClient/', AddClient.as_view()),
+    path('showClient/<str:client_id>/', ShowClientData.as_view()),
     path('showClient/', ShowClient.as_view()),
+    path('addProduct/', AddProduct.as_view()),
+    path('addInvestmentProject/', AddInvestmentProject.as_view()),
+    path('addPricingPlan/', AddPricingPlan.as_view()),
+    path('showProduct/', ShowProduct.as_view()),
+    path('showProduct/<str:product_id>', ShowProductData.as_view()),
+
+
 
 ]

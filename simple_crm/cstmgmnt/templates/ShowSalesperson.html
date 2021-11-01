@@ -1,0 +1,32 @@
+{% extends 'show_data_base.html' %}
+{% block title %} <h1> Simple CRM / Show Salesperson for Investment  </h1> {% endblock %}
+{% block action %}
+    <h2> Pick salesperson from the list </h2>
+{% endblock %}
+{% block second_action %}
+<form name="pick_salesperson" method="POST" >
+  {% csrf_token %}
+
+    <table>
+            <tbody>
+                     {% for salesperson in salespersons %}
+                    <tr>
+                        <td> Salesperson id: {{salesperson.id}}</td> <td><a href="http://127.0.0.1:8000/showSalesPerson/{{ salesperson.id }}"> {{ salesperson }}</a></td>
+                    </tr>
+                        {% endfor %}
+              </tbody>
+        </table>
+</form>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,47 @@
+{% extends 'show_data_base.html' %}
+{% block title %} <h1> Simple CRM / Show/Edit/Delete Client  </h1> {% endblock %}
+{% block action %}
+    <h2> Data of Client : </h2>
+{% endblock %}
+{% block second_action %}
+<form name="edit_data" method="POST">
+     {% csrf_token %}
+<table>
+        <tbody>
+                <tr>
+                    <td>{{ form_client_basic_data }}</td>
+                </tr>
+                <tr>
+                    <td>{{ form_client_rel_data }}</td>
+                </tr>
+                <td></td>
+        <tr><td><button type="submit" name="save_client_data">Save data</button></td>
+            <td><button type="submit" name= "delete_client">Delete client from database </button></td>
+            <td></td>
+        </tr>
+        </tbody>
+</table>
+
+</form>
+
+{% endblock %}
+
+{% block third_action %}
+
+<br>
+<form action="http://127.0.0.1:8000/showClient/">
+    <input type="submit" value="Pick client from different Investment" />
+</form>
+<br>
+{% endblock %}
+{% block fourth_action %}
+{{ message  }}
+
+{% endblock %}
+
+
+
+
+
+
+
