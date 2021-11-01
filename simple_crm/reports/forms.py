@@ -51,5 +51,10 @@ class PricingPlanForm_2(ModelForm):
         model = PricingPlan
         fields = ['products']
 
+class EditInvestmentForm(ModelForm):
+    class Meta:
+        model = InvestmentProject
+        fields = ['name', 'city', 'address', 'district','specification','number_of_apartments','start_date','finnish_date']
+
 
 

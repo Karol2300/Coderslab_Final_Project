@@ -70,12 +70,12 @@ district = [
 class InvestmentProject(models.Model):
     name = models.CharField(max_length=128, null=False)
     city = models.CharField(max_length=128, null=False)
-    address = models.TextField(null=False)
+    address = models.CharField(max_length=255,null=False)
     district = models.CharField(max_length=128, choices=district, null=False)
     specification = models.TextField(null=True)
     number_of_apartments = models.IntegerField(null=True)
-    start_date = models.DateTimeField(null=False)
-    finnish_date = models.DateTimeField(null=False)
+    start_date = models.DateField(null=False)
+    finnish_date = models.DateField(null=False)
 
     def __str__(self):
         return f"{self.name} "

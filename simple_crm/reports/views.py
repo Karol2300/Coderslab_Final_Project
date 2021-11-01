@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1 , PricingPlanForm_2, EditProductForm_1
+from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1 , PricingPlanForm_2, EditProductForm_1, EditInvestmentForm
 from django.views import View
 from reports.models import Product, PricingPlan, InvestmentProject
 from cstmgmnt.forms import PickInvestment
@@ -154,3 +154,57 @@ class ShowProductData(View):
             product.delete()
             message = "Product removed from data base!"
             return render(request, 'ShowProductDetails.html', {'message': message, })
+
+class ShowInvestment(View):
+    def get(self, request):
+        if request.method == 'GET':
+            investment_projects = InvestmentProject.objects.all()
+            investment_projects_ls = [val for val in investment_projects]
+            return render(request, 'PickInvestment.html',
+                          {'investments': investment_projects_ls, })
+
+    def post(self, request):
+        if request.method == "POST" and PickInvestment(request.POST) and 'investment_form' in request.POST:
+            data = PickInvestment(request.POST)
+            if data.is_valid():
+                product = Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id))
+                products = [val for val in product]
+                return render(request, 'PickInvestment.html', {'products': products,})
+            else:
+                message = f"Incorrect Product!"
+                return render(request, 'PickInvestment.html', {'message': message})
+
+class ShowInvestmentData(View):
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET' and kwargs['investment_id']:
+            investment_id = kwargs['investment_id']
+            investment = InvestmentProject.objects.get(pk=str(investment_id))
+            form_investment_data = EditInvestmentForm(initial=model_to_dict(investment))
+            return render(request, 'ShowInvestmentDetails.html', {'form_investment_data': form_investment_data, })
+        else:
+            message = f"Investment not found!"
+            return render(request, 'ShowInvestmentDetails.html', {'message': message, })
+
+    def post(self, request, *args, **kwargs):
+        if request.method == "POST" and EditInvestmentForm(request.POST) and 'save_investment_data' in request.POST:
+            investment_id = kwargs['investment_id']
+            form = EditInvestmentForm(request.POST)
+            if form.is_valid():
+                update_investment = InvestmentProject.objects.get(pk=investment_id)
+                form = EditInvestmentForm(request.POST, instance=update_investment)
+                form.save()
+                message = "Investment data updated"
+                return render(request, 'ShowInvestmentDetails.html', {'message': message})
+            else:
+                message = "Incorrect data!"
+                investment = InvestmentProject.objects.get(pk=str(investment_id))
+                form_investment_data = EditInvestmentForm(initial=model_to_dict(investment))
+                return render(request, 'ShowInvestmentDetails.html', {'form_investment_data': form_investment_data, })
+
+        if request.method == "POST" and EditInvestmentForm(request.POST) and 'delete_investment' in request.POST:
+            investment_id = kwargs['investment_id']
+            investment = InvestmentProject.objects.get(pk=str(investment_id))
+            investment.delete()
+            message = "Investment removed from data base!"
+            return render(request, 'ShowInvestmentDetails.html', {'message': message, })
