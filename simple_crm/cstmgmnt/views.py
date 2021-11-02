@@ -13,6 +13,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from reports.models import InvestmentProject, Product, PricingPlan
 from django.forms import model_to_dict
+from django.contrib.auth.models import User
 
 from cstmgmnt.forms import ClientForm_1, ClientForm_2, SalesPersonForm_1, SalesPersonForm_2, PickInvestment, PickClient, \
     EditClientForm_1, EditSalesPersonForm_1, PickSalesperson
@@ -42,7 +43,7 @@ class AddClient(View):
 
                     new_client.investments.set(form_2.cleaned_data['investments'])
                     new_client.products.set(form_2.cleaned_data['products'])
-
+                    new_client.users.set(form_2.cleaned_data['users'])
                     message = f"Client added successfully"
                     return render(request, 'AddClient.html', {'form_1': form_1,'form_2': form_2, 'message': message,})
                 else:
@@ -129,9 +130,9 @@ class AddSalesPerson(View):
             form_2 = SalesPersonForm_2(request.POST)
             if form_1.is_valid() and form_2.is_valid():
                 new_salesperson = SalesPerson.objects.create(first_name=form_1.cleaned_data['first_name'],
-                                                             last_name=form_1.cleaned_data['last_name'],
-                                                             login=form_1.cleaned_data['login'],
-                                                             password=form_1.cleaned_data['password'], )
+                                                             last_name=form_1.cleaned_data['last_name'],)
+                                                             # login=form_1.cleaned_data['login'],
+                                                             # password=form_1.cleaned_data['password'], )
 
                 new_salesperson.investments.set(form_2.cleaned_data['investments'])
                 new_salesperson.products.set(form_2.cleaned_data['products'])

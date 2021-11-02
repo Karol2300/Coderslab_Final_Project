@@ -1,9 +1,11 @@
 from django.shortcuts import render
-from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1 , PricingPlanForm_2, EditProductForm_1, EditInvestmentForm
+from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1 , PricingPlanForm_2, EditProductForm_1, EditInvestmentForm, UserForm
 from django.views import View
 from reports.models import Product, PricingPlan, InvestmentProject
 from cstmgmnt.forms import PickInvestment
 from django.forms import model_to_dict
+from django.contrib.auth.models import User
+
 
 class AddProduct(View):
     def get(self, request):
@@ -208,3 +210,74 @@ class ShowInvestmentData(View):
             investment.delete()
             message = "Investment removed from data base!"
             return render(request, 'ShowInvestmentDetails.html', {'message': message, })
+
+
+class AddUser(View):
+    def get(self, request):
+        if request.method == 'GET':
+            form = UserForm
+            return render(request, 'AddUser.html', {'form': form, })
+
+    def post(self, request):
+        if request.method == "POST":
+            form = UserForm(request.POST)
+            if form.is_valid():
+                new_user = User.objects.create(username=form.cleaned_data['username'],
+                                                                  email=form.cleaned_data['email'],
+                                                                  password=form.cleaned_data['password'])
+
+                message = f"Investment User added successfully"
+                return render(request, 'AddUser.html', {'form': form, 'message': message, })
+            else:
+                message = f"Incorrect data!"
+                return render(request, 'AddUser.html', {'form': form, 'message': message})
+
+class ShowUser(View):
+    def get(self, request):
+        if request.method == 'GET':
+            users = User.objects.all()
+            users_projects_ls = [val for val in users]
+            return render(request, 'ShowUsers.html',
+                          {'users': users_projects_ls, })
+
+
+class ShowUserData(View):
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET' and kwargs['user_id']:
+            user_id = kwargs['user_id']
+            user = User.objects.get(pk=str(user_id))
+            form_user_data = UserForm(initial=model_to_dict(user))
+            return render(request, 'ShowUserDetails.html', {'form_user_details_data': form_user_data, })
+        else:
+            message = f"User not found!"
+            return render(request, 'ShowUserDetails.html', {'message': message, })
+
+    def post(self, request, *args, **kwargs):
+        if request.method == "POST" and UserForm(request.POST)  \
+                and 'save_user_data' in request.POST:
+            user_id = kwargs['user_id']
+            form_1 = UserForm(request.POST)
+            if form_1.is_valid():
+                update_user = User.objects.get(pk=user_id)
+                form_1 = UserForm(request.POST, instance=update_user)
+                # update_user.set_password(f"{form_1.cleaned_data['password']}")
+                form_1.save()
+
+
+
+                message = "User data updated"
+                return render(request, 'ShowUserDetails.html', {'message': message})
+            else:
+                message = "Incorrect data!"
+                user = User.objects.get(pk=str(user_id))
+                form_user_data = UserForm(initial=model_to_dict(user))
+                return render(request, 'ShowUserDetails.html', {'message': message,
+                                                                  'form_user_details_data': form_user_data, })
+
+        if request.method == "POST" and UserForm(request.POST)  \
+                and 'delete_user' in request.POST:
+            user_id = kwargs['user_id']
+            user = User.objects.get(pk=str(user_id))
+            user.delete()
+            message = "User removed from data base!"
+            return render(request, 'ShowProductDetails.html', {'message': message, })

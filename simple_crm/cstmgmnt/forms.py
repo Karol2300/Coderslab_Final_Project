@@ -26,14 +26,14 @@ class ClientForm_2(ModelForm):
 class SalesPersonForm_1(forms.Form):
     first_name = forms.CharField(max_length=255)
     last_name = forms.CharField(max_length=255)
-    login = forms.CharField(max_length=255)
-    password = forms.CharField(widget=forms.PasswordInput)
+    # login = forms.CharField(max_length=255)
+    # password = forms.CharField(widget=forms.PasswordInput)
 
 
 class SalesPersonForm_2(ModelForm):
     class Meta:
         model = SalesPerson
-        fields = ['investments', 'products', 'clients']
+        fields = ['investments', 'products', 'clients','users']
 
 class PickInvestment(forms.Form):
     investment = forms.ModelChoiceField(widget=forms.Select, queryset=InvestmentProject.objects.all())
@@ -55,6 +55,6 @@ class EditSalesPersonForm_1(ModelForm):
     id = forms.CharField(max_length=255)
     class Meta:
         model = SalesPerson
-        fields = ['first_name', 'last_name','login','password']
+        fields = ['first_name', 'last_name']
 
 

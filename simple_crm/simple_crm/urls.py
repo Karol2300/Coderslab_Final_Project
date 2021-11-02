@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from cstmgmnt.views import AddClient,AddSalesPerson,ShowClientData,ShowClient,ShowSalesPerson, ShowSalesPersonData
-from reports.views import AddProduct, AddInvestmentProject, AddPricingPlan, ShowProduct, ShowProductData, ShowInvestment, ShowInvestmentData
+from reports.views import AddProduct, AddInvestmentProject, AddPricingPlan, ShowProduct, ShowProductData, ShowInvestment, ShowInvestmentData,AddUser,ShowUser,ShowUserData
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,6 +35,9 @@ urlpatterns = [
     path('showProduct/<str:product_id>', ShowProductData.as_view()),
     path('showInvestmentProject/', ShowInvestment.as_view()),
     path('showInvestmentProject/<str:investment_id>', ShowInvestmentData.as_view()),
+    path('addUser/', AddUser.as_view()),
+    path('showUser/', ShowUser.as_view()),
+    path('editUser/<str:user_id>', ShowUserData.as_view()),
 
 
 

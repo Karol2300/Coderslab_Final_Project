@@ -1,0 +1,42 @@
+{% extends 'show_data_base.html' %}
+{% block title %} <h1> Simple CRM / Show/Edit/Delete User  </h1> {% endblock %}
+{% block action %}
+    <h2> User data : </h2>
+{% endblock %}
+{% block second_action %}
+<form name="edit_data" method="POST">
+     {% csrf_token %}
+<table>
+        <tbody>
+                <tr>
+                    <td>{{ form_user_details_data }}</td>
+                </tr>
+                <td></td>
+        <tr><td><button type="submit" name="save_user_data">Save data</button></td>
+            <td><button type="submit" name= "delete_user">Delete user from database </button></td>
+            <td></td>
+        </tr>
+        </tbody>
+</table>
+
+</form>
+
+{% endblock %}
+{% block third_action %}
+
+<br>
+<form action="http://127.0.0.1:8000/showUser/">
+    <input type="submit" value="Pick user" />
+</form>
+<br>
+{% endblock %}
+{% block fourth_action %}
+{{ message  }}
+{% endblock %}
+
+
+
+
+
+
+

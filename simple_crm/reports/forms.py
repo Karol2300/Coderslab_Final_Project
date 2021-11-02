@@ -3,7 +3,7 @@ from django.forms import ModelForm
 from django import forms
 
 from reports.models import Product, InvestmentProject, PricingPlan, available_floor, available_rooms,direction,district,overall_apartment_score, product_status
-
+from django.contrib.auth.models import User
 class ProductForm_1(forms.Form):
     code = forms.CharField(max_length=255)
     direction = forms.ChoiceField(choices=direction)
@@ -55,6 +55,12 @@ class EditInvestmentForm(ModelForm):
     class Meta:
         model = InvestmentProject
         fields = ['name', 'city', 'address', 'district','specification','number_of_apartments','start_date','finnish_date']
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username','email','password']
+
 
 
 
