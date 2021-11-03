@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1 , PricingPlanForm_2, EditProductForm_1, EditInvestmentForm, UserForm
+from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1 , PricingPlanForm_2, EditProductForm_1, EditInvestmentForm, UserForm,UserFormPassword
 from django.views import View
 from reports.models import Product, PricingPlan, InvestmentProject
 from cstmgmnt.forms import PickInvestment
@@ -215,22 +215,27 @@ class ShowInvestmentData(View):
 class AddUser(View):
     def get(self, request):
         if request.method == 'GET':
-            form = UserForm
-            return render(request, 'AddUser.html', {'form': form, })
+            form_1 = UserForm
+            form_2 = UserFormPassword
+            return render(request, 'AddUser.html', {'form_1': form_1,
+                                                    'form_2': form_2, })
 
     def post(self, request):
         if request.method == "POST":
-            form = UserForm(request.POST)
-            if form.is_valid():
-                new_user = User.objects.create(username=form.cleaned_data['username'],
-                                                                  email=form.cleaned_data['email'],
-                                                                  password=form.cleaned_data['password'])
+            form_1 = UserForm(request.POST)
+            form_2 = UserFormPassword(request.POST)
 
-                message = f"Investment User added successfully"
-                return render(request, 'AddUser.html', {'form': form, 'message': message, })
+            if form_1.is_valid() and form_2.is_valid():
+                new_user = User.objects.create_user(username=form_1.cleaned_data['username'],
+                                                                  email=form_1.cleaned_data['email'],)
+
+                new_user.set_password(form_2.cleaned_data['password'])
+                new_user.save()
+                message = f"User added successfully"
+                return render(request, 'AddUser.html', {'form_1': form_1,'form_2': form_2, 'message': message, })
             else:
                 message = f"Incorrect data!"
-                return render(request, 'AddUser.html', {'form': form, 'message': message})
+                return render(request, 'AddUser.html', {'form_1': form_1,'form_2': form_2, 'message': message})
 
 class ShowUser(View):
     def get(self, request):
@@ -246,33 +251,36 @@ class ShowUserData(View):
         if request.method == 'GET' and kwargs['user_id']:
             user_id = kwargs['user_id']
             user = User.objects.get(pk=str(user_id))
-            form_user_data = UserForm(initial=model_to_dict(user))
-            return render(request, 'ShowUserDetails.html', {'form_user_details_data': form_user_data, })
+            form_user_data_1 = UserForm(initial=model_to_dict(user))
+            form_user_data_2 = UserFormPassword()
+            return render(request, 'ShowUserDetails.html', {'form_user_details_data_1': form_user_data_1, 'form_user_details_data_2': form_user_data_2, })
         else:
             message = f"User not found!"
             return render(request, 'ShowUserDetails.html', {'message': message, })
 
     def post(self, request, *args, **kwargs):
-        if request.method == "POST" and UserForm(request.POST)  \
+        if request.method == "POST" and UserForm(request.POST) and UserFormPassword(request.POST)  \
                 and 'save_user_data' in request.POST:
             user_id = kwargs['user_id']
             form_1 = UserForm(request.POST)
+            form_2 = UserFormPassword(request.POST)
             if form_1.is_valid():
                 update_user = User.objects.get(pk=user_id)
                 form_1 = UserForm(request.POST, instance=update_user)
-                # update_user.set_password(f"{form_1.cleaned_data['password']}")
+                form_2 = UserFormPassword(request.POST)
+                password = form_2.cleaned_data['password']
+                update_user.set_password(password)
+                update_user.save()
                 form_1.save()
-
-
-
                 message = "User data updated"
                 return render(request, 'ShowUserDetails.html', {'message': message})
             else:
                 message = "Incorrect data!"
                 user = User.objects.get(pk=str(user_id))
-                form_user_data = UserForm(initial=model_to_dict(user))
+                form_user_details_data_1 = UserForm(initial=model_to_dict(user))
+                form_user_details_data_2 = UserFormPassword()
                 return render(request, 'ShowUserDetails.html', {'message': message,
-                                                                  'form_user_details_data': form_user_data, })
+                                                                  'form_user_details_data_1': form_user_details_data_1,'form_user_details_data_2': form_user_details_data_2 })
 
         if request.method == "POST" and UserForm(request.POST)  \
                 and 'delete_user' in request.POST:

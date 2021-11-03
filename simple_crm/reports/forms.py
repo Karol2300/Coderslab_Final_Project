@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 
 from django import forms
+from django.forms import PasswordInput
 
 from reports.models import Product, InvestmentProject, PricingPlan, available_floor, available_rooms,direction,district,overall_apartment_score, product_status
 from django.contrib.auth.models import User
@@ -59,8 +60,14 @@ class EditInvestmentForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username','email','password']
+        fields = ['username','email']
+
+class UserFormPassword(forms.Form):
+    password = forms.CharField(max_length=255,widget=PasswordInput)
 
 
-
+class LoginForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password']
 

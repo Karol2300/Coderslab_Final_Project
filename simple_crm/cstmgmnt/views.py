@@ -10,13 +10,16 @@ from django.http import request
 from django import forms
 from django.forms import ModelForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from reports.models import InvestmentProject, Product, PricingPlan
 from django.forms import model_to_dict
 from django.contrib.auth.models import User
 
 from cstmgmnt.forms import ClientForm_1, ClientForm_2, SalesPersonForm_1, SalesPersonForm_2, PickInvestment, PickClient, \
     EditClientForm_1, EditSalesPersonForm_1, PickSalesperson
+from reports.forms import LoginForm
+from django.contrib.auth import authenticate, login
+
 
 
 
@@ -204,3 +207,23 @@ class ShowSalesPersonData(View):
                                                            'form_salesperson_basic_data': form_salesperson_basic_data,
                                                             'form_salesperson_rel_data': form_salesperson_rel_data, })
 
+class ValidateUser(View):
+
+        def get(self,request):
+            if request.method == "GET":
+                return render(request,'Login.html',{'login_form': LoginForm})
+
+        def post(self, request):
+            if request.method =="POST":
+                form = LoginForm(request.POST)
+                username = form['username'].value()
+                password = form['password'].value()
+                user = authenticate(request,username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    user = request.user
+                    if user.is_authenticated:
+                        return redirect('/showInvestmentProject/')
+                else:
+                    message = 'Niepoprawny login/hasło'
+                    return render(request, 'Login.html', {'login_form': LoginForm(), 'message': message})
