@@ -44,7 +44,7 @@ class SalesPerson(models.Model):
     investments = models.ManyToManyField(InvestmentProject)
     products = models.ManyToManyField(Product, through='SalesPersonProduct')
     clients = models.ManyToManyField(Client)
-    users = models.ForeignKey(User,on_delete=models.CASCADE)
+    users = models.OneToOneField(User,on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} "

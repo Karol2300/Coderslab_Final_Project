@@ -13,7 +13,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from reports.models import InvestmentProject, Product, PricingPlan
 from django.forms import model_to_dict
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 
 from cstmgmnt.forms import ClientForm_1, ClientForm_2, SalesPersonForm_1, SalesPersonForm_2, PickInvestment, PickClient, \
     EditClientForm_1, EditSalesPersonForm_1, PickSalesperson
@@ -25,14 +25,21 @@ from django.contrib.auth import authenticate, login
 
 
 
+
 class AddClient(View):
         def get(self, request):
-            if request.method == 'GET':
-                form_1 = ClientForm_1
-                form_2 = ClientForm_2
+            form_1 = ClientForm_1
+            form_2 = ClientForm_2
+            if request.method == 'GET' and request.user.has_perm("cstmgmnt.add_client"):
+
 
                 return render(request,'AddClient.html', {'form_1': form_1,
-                                                          'form_2': form_2,})
+                                                            'form_2': form_2,})
+            else:
+                message = f"Incorrect permision, contact admin"
+                return render(request, 'AddClient.html', {
+                                                          'message': message})
+
         def post(self,request):
             if request.method == "POST":
                 form_1 = ClientForm_1(request.POST or None)
@@ -52,7 +59,6 @@ class AddClient(View):
                 else:
                     message = f"Incorrect data!"
                     return render(request, 'AddClient.html', {'form_1': form_1,'form_2': form_2, 'message': message})
-
 
 
 
@@ -133,13 +139,15 @@ class AddSalesPerson(View):
             form_2 = SalesPersonForm_2(request.POST)
             if form_1.is_valid() and form_2.is_valid():
                 new_salesperson = SalesPerson.objects.create(first_name=form_1.cleaned_data['first_name'],
-                                                             last_name=form_1.cleaned_data['last_name'],)
-                                                             # login=form_1.cleaned_data['login'],
-                                                             # password=form_1.cleaned_data['password'], )
+                                                             last_name=form_1.cleaned_data['last_name'],
+                                                             users=form_2.cleaned_data['users'])
+
 
                 new_salesperson.investments.set(form_2.cleaned_data['investments'])
                 new_salesperson.products.set(form_2.cleaned_data['products'])
                 new_salesperson.clients.set(form_2.cleaned_data['clients'])
+
+                new_salesperson.save()
                 message = f"Sales person added successfully"
                 return render(request, 'AddSalesperson.html',
                               {'form_1': form_1, 'form_2': form_2, 'message': message,
@@ -206,6 +214,14 @@ class ShowSalesPersonData(View):
                 return render(request, 'ShowSalespersonDetails.html', {'message': message,
                                                            'form_salesperson_basic_data': form_salesperson_basic_data,
                                                             'form_salesperson_rel_data': form_salesperson_rel_data, })
+
+        if request.method == "POST" and EditSalesPersonForm_1(request.POST) and SalesPersonForm_2(request.POST) \
+                and 'delete_salesperson' in request.POST:
+            salesperson_id = kwargs['salesperson_id']
+            salesperson = SalesPerson.objects.get(pk=str(salesperson_id))
+            salesperson.delete()
+            message = "Salesperson removed from data base!"
+            return render(request, 'ShowSalespersonDetails.html', {'message': message, })
 
 class ValidateUser(View):
 

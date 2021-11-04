@@ -67,7 +67,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'cstmgmnt.uni_context_processor.get_user_info',
                 'cstmgmnt.uni_context_processor.application_info',
+                # 'cstmgmnt.uni_context_processor.logout_login',
+
             ],
         },
     },

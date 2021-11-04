@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8" >
     <title>{% block title %} Simpe CRM {% endblock %}</title>
 </head>
+<body>
 
 
                  {% block action %} Action Name {% endblock %}
@@ -14,4 +15,11 @@
 
 
 </body>
+<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br>
+<!--    <form  method="POST">-->
+<!--        {% csrf_token %}-->
+<!--        <button type="submit" name="logout/login"> Login/Logout-->
+<!--        </button>-->
+<!--    </form>-->
+</footer>
 </html>
