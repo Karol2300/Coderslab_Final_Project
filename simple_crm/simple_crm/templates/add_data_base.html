@@ -23,4 +23,10 @@
 
 
 </body>
+<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br>
+    <form  method="POST">
+        {% csrf_token %}
+        <button type="submit" name="logout"> Logout </button>
+    </form>
+</footer>
 </html>

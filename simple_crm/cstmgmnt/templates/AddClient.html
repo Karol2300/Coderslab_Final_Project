@@ -7,14 +7,14 @@
 {% endblock %}
 
 {% block form %}
-    <form method="POST">
+    <form method="POST" name="add_user">
         {% csrf_token %}
         <table>
             <tbody>
                     {{ form_1 }}
                     {{ form_2 }}
                     <tr>
-                        <td> <button type="submit"> Submit </button> <button type="reset" > Reset! </button></td>
+                        <td> <button type="submit" > Submit </button> <button type="reset" > Reset! </button></td>
                     </tr>
             </tbody>
         </table>

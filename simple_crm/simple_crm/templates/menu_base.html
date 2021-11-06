@@ -7,18 +7,17 @@
 <body>
 
 
-                 {% block action %} Action Name {% endblock %}
-                 {% block second_action %} Second Action Name {% endblock %}
-                {% block third_action %} {% endblock %}
-                {% block fourth_action %}  {% endblock %}
-                {% block info %} info  {% endblock %}
-
+               {% block menu_1 %}  {% endblock %}
+               {% block menu_2 %}  {% endblock %}
+                {% block menu_3 %} {% endblock %}
+                {% block menu_4 %}  {% endblock %}
+                {% block message %} {% endblock %}
 
 </body>
 <footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br>
     <form  method="POST">
         {% csrf_token %}
-        <button type="submit" name="logout"> Logout
+        <button type="submit" name="logout"> Login\Logout
         </button>
     </form>
 </footer>

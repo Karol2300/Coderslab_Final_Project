@@ -5,11 +5,13 @@ from reports.models import Product, PricingPlan, InvestmentProject
 from cstmgmnt.forms import PickInvestment
 from django.forms import model_to_dict
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required,permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 
-
-class AddProduct(View):
+class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
+    permission_required = ('reports.add_product', 'reports.show_product')
     def get(self, request):
-        if request.method == 'GET':
+        if request.method == 'GET' and request.user.has_perm(permission_required):
             form_1 = ProductForm_1
             form_2 = ProductForm_2
 
@@ -17,7 +19,7 @@ class AddProduct(View):
                                                       'form_2': form_2, })
 
     def post(self, request):
-        if request.method == "POST":
+        if request.method == "POST" and request.user.has_perm(permission_required):
             form_1 = ProductForm_1(request.POST)
             form_2 = ProductForm_2(request.POST)
             if form_1.is_valid() and form_2.is_valid():
@@ -40,14 +42,15 @@ class AddProduct(View):
                 return render(request, 'AddProduct.html', {'form_1': form_1, 'form_2': form_2, 'message': message})
 
 
-class AddInvestmentProject(View):
+class AddInvestmentProject(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = ('reports.add_investmentproject','reports.show_investmentproject')
     def get(self, request):
-        if request.method == 'GET':
+        if request.method == 'GET' and request.user.has_perm(permission_required):
             form = InvestmentForm
             return render(request, 'AddInvestmentProject.html', {'form': form,})
 
     def post(self, request):
-        if request.method == "POST":
+        if request.method == "POST" and request.user.has_perm(permission_required):
             form = InvestmentForm(request.POST)
             if form.is_valid():
                 new_investment = InvestmentProject.objects.create(name=form.cleaned_data['name'],
@@ -65,16 +68,17 @@ class AddInvestmentProject(View):
                 message = f"Incorrect data!"
                 return render(request, 'AddInvestmentProject.html', {'form': form, 'message': message})
 
-class AddPricingPlan(View):
+class AddPricingPlan(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = 'reports.add_pricingplan'
     def get(self, request):
-        if request.method == 'GET':
+        if request.method == 'GET' and request.user.has_perm(permission_required):
             form_1 = PricingPlanForm_1
             form_2 = PricingPlanForm_2
             return render(request, 'AddPricingPlan.html', {'form_1': form_1,
                                                       'form_2': form_2,})
 
     def post(self, request):
-        if request.method == "POST":
+        if request.method == "POST" and request.user.has_perm(permission_required):
             form_1 = PricingPlanForm_1(request.POST)
             form_2 = PricingPlanForm_2(request.POST)
             if form_1.is_valid() and form_2.is_valid():
@@ -93,15 +97,16 @@ class AddPricingPlan(View):
                 return render(request, 'AddPricingPlan.html', {'form_1': form_1, 'form_2': form_2, 'message': message})
 
 
-class ShowProduct(View):
+class ShowProduct(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = ('reports.show_product')
     def get(self, request):
-        if request.method == 'GET':
+        if request.method == 'GET' and request.user.has_perm(permission_required):
             product_by_investment_form = PickInvestment()
             return render(request, 'ShowProduct_pick_investment.html',
                           {'product_by_investment_form': product_by_investment_form, })
 
     def post(self, request):
-        if request.method == "POST" and PickInvestment(request.POST) and 'investment_form' in request.POST:
+        if request.method == "POST" and PickInvestment(request.POST) and 'investment_form' in request.POST and request.user.has_perm(permission_required):
             data = PickInvestment(request.POST)
             if data.is_valid():
                 product = Product.objects.all().filter(
@@ -113,9 +118,10 @@ class ShowProduct(View):
                 return render(request, 'ShowProduct.html', {'message': message})
 
 
-class ShowProductData(View):
+class ShowProductData(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = ('reports.show_product','reports.change_product','reports.delete_product')
     def get(self, request, *args, **kwargs):
-        if request.method == 'GET' and kwargs['product_id']:
+        if request.method == 'GET' and kwargs['product_id'] and request.user.has_perm(permission_required):
             product_id = kwargs['product_id']
             product = Product.objects.get(pk=str(product_id))
             form_product_basic_data = EditProductForm_1(initial=model_to_dict(product))
@@ -128,7 +134,7 @@ class ShowProductData(View):
 
     def post(self, request, *args, **kwargs):
         if request.method == "POST" and EditProductForm_1(request.POST) and ProductForm_2(request.POST) \
-                and 'save_product_data' in request.POST:
+                and 'save_product_data' and request.user.has_perm(permission_required) in request.POST:
             product_id = kwargs['product_id']
             form_1 = EditProductForm_1(request.POST)
             form_2 = EditProductForm_1(request.POST)
@@ -150,23 +156,24 @@ class ShowProductData(View):
                                                                   'form_client_rel_data': form_client_rel_data, })
 
         if request.method == "POST" and EditProductForm_1(request.POST) and ProductForm_2(request.POST) \
-                and 'delete_product' in request.POST:
+                and 'delete_product' and request.user.has_perm(permission_required) in request.POST:
             product_id = kwargs['product_id']
             product = Product.objects.get(pk=str(product_id))
             product.delete()
             message = "Product removed from data base!"
             return render(request, 'ShowProductDetails.html', {'message': message, })
 
-class ShowInvestment(View):
+class ShowInvestment(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = ('reports.show_investmentproject')
     def get(self, request):
-        if request.method == 'GET':
+        if request.method == 'GET' and request.user.has_perm(permission_required):
             investment_projects = InvestmentProject.objects.all()
             investment_projects_ls = [val for val in investment_projects]
             return render(request, 'PickInvestment.html',
                           {'investments': investment_projects_ls, })
 
     def post(self, request):
-        if request.method == "POST" and PickInvestment(request.POST) and 'investment_form' in request.POST:
+        if request.method == "POST" and PickInvestment(request.POST) and 'investment_form' in request.POST and request.user.has_perm(permission_required):
             data = PickInvestment(request.POST)
             if data.is_valid():
                 product = Product.objects.all().filter(
@@ -177,9 +184,10 @@ class ShowInvestment(View):
                 message = f"Incorrect Product!"
                 return render(request, 'PickInvestment.html', {'message': message})
 
-class ShowInvestmentData(View):
+class ShowInvestmentData(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = ('reports.show_investmentproject', 'reports.change_investmentproject', 'reports.delete_investmentproject')
     def get(self, request, *args, **kwargs):
-        if request.method == 'GET' and kwargs['investment_id']:
+        if request.method == 'GET' and kwargs['investment_id'] and request.user.has_perm(permission_required):
             investment_id = kwargs['investment_id']
             investment = InvestmentProject.objects.get(pk=str(investment_id))
             form_investment_data = EditInvestmentForm(initial=model_to_dict(investment))
@@ -189,7 +197,7 @@ class ShowInvestmentData(View):
             return render(request, 'ShowInvestmentDetails.html', {'message': message, })
 
     def post(self, request, *args, **kwargs):
-        if request.method == "POST" and EditInvestmentForm(request.POST) and 'save_investment_data' in request.POST:
+        if request.method == "POST" and EditInvestmentForm(request.POST) and 'save_investment_data' and request.user.has_perm(permission_required) in request.POST:
             investment_id = kwargs['investment_id']
             form = EditInvestmentForm(request.POST)
             if form.is_valid():
@@ -204,7 +212,7 @@ class ShowInvestmentData(View):
                 form_investment_data = EditInvestmentForm(initial=model_to_dict(investment))
                 return render(request, 'ShowInvestmentDetails.html', {'form_investment_data': form_investment_data, })
 
-        if request.method == "POST" and EditInvestmentForm(request.POST) and 'delete_investment' in request.POST:
+        if request.method == "POST" and EditInvestmentForm(request.POST) and 'delete_investment' and request.user.has_perm(permission_required) in request.POST:
             investment_id = kwargs['investment_id']
             investment = InvestmentProject.objects.get(pk=str(investment_id))
             investment.delete()
@@ -212,16 +220,17 @@ class ShowInvestmentData(View):
             return render(request, 'ShowInvestmentDetails.html', {'message': message, })
 
 
-class AddUser(View):
+class AddUser(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = ('reports.add_user','reports.show_user')
     def get(self, request):
-        if request.method == 'GET':
+        if request.method == 'GET' and request.user.has_perm(permission_required):
             form_1 = UserForm
             form_2 = UserFormPassword
             return render(request, 'AddUser.html', {'form_1': form_1,
                                                     'form_2': form_2, })
 
     def post(self, request):
-        if request.method == "POST":
+        if request.method == "POST" and request.user.has_perm(permission_required):
             form_1 = UserForm(request.POST)
             form_2 = UserFormPassword(request.POST)
 
@@ -237,18 +246,20 @@ class AddUser(View):
                 message = f"Incorrect data!"
                 return render(request, 'AddUser.html', {'form_1': form_1,'form_2': form_2, 'message': message})
 
-class ShowUser(View):
+class ShowUser(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = ('reports.add_user', 'reports.show_user','reports.delete_user')
     def get(self, request):
-        if request.method == 'GET':
+        if request.method == 'GET' and request.user.has_perm(permission_required):
             users = User.objects.all()
             users_projects_ls = [val for val in users]
             return render(request, 'ShowUsers.html',
                           {'users': users_projects_ls, })
 
 
-class ShowUserData(View):
+class ShowUserData(LoginRequiredMixin, PermissionRequiredMixin,View):
+    permission_required = ('reports.add_user', 'reports.show_user', 'reports.delete_user')
     def get(self, request, *args, **kwargs):
-        if request.method == 'GET' and kwargs['user_id']:
+        if request.method == 'GET' and kwargs['user_id'] and request.user.has_perm(permission_required):
             user_id = kwargs['user_id']
             user = User.objects.get(pk=str(user_id))
             form_user_data_1 = UserForm(initial=model_to_dict(user))
@@ -260,7 +271,7 @@ class ShowUserData(View):
 
     def post(self, request, *args, **kwargs):
         if request.method == "POST" and UserForm(request.POST) and UserFormPassword(request.POST)  \
-                and 'save_user_data' in request.POST:
+                and 'save_user_data' and request.user.has_perm(permission_required) in request.POST:
             user_id = kwargs['user_id']
             form_1 = UserForm(request.POST)
             form_2 = UserFormPassword(request.POST)
@@ -280,12 +291,47 @@ class ShowUserData(View):
                 form_user_details_data_1 = UserForm(initial=model_to_dict(user))
                 form_user_details_data_2 = UserFormPassword()
                 return render(request, 'ShowUserDetails.html', {'message': message,
-                                                                  'form_user_details_data_1': form_user_details_data_1,'form_user_details_data_2': form_user_details_data_2 })
+                                                                  'form_user_details_data_1': form_user_details_data_1,
+                                                                'form_user_details_data_2': form_user_details_data_2 })
 
-        if request.method == "POST" and UserForm(request.POST)  \
-                and 'delete_user' in request.POST:
+        if request.method == "POST" and UserForm(request.POST)   and 'delete_user' and request.user.has_perm(permission_required) in request.POST:
             user_id = kwargs['user_id']
             user = User.objects.get(pk=str(user_id))
             user.delete()
             message = "User removed from data base!"
             return render(request, 'ShowProductDetails.html', {'message': message, })
+
+class ShowMenu(LoginRequiredMixin, PermissionRequiredMixin,View):
+    def get(self, request):
+        if request.method == "GET":
+            user_type = request.user
+            if user_type.is_superuser:
+
+                ctx = {'menues': ["Client","Product",'Pricing Plan',
+                                   'Investment Project','Salesperson','User'],
+                        'menu_client': {"Add Client": "http://127.0.0.1:8000/addClient/",
+                                        "Show Client": "http://127.0.0.1:8000/showClient/"},
+                        'menu_product': {"Add Product": "http://127.0.0.1:8000/addProduct/",
+                                        "Show Product": "http://127.0.0.1:8000/showProduct/"},
+                        'menu_pricing_plan': {"Add Pricing Plan": "http://127.0.0.1:8000/addPricingPlan/"},
+                        'menu_investment': {"Show Investment Project": "http://127.0.0.1:8000/showInvestmentProject/",
+                                        "Add Investment Project": "http://127.0.0.1:8000/addInvestmentProject/",},
+                        'menu_salesperson': {"Show Salesperson": "http://127.0.0.1:8000/showSalesPerson/",
+                                            "Add Salesperson": "http://127.0.0.1:8000/addSalesPerson/",},
+                        'menu_user': {"Add User": "http://127.0.0.1:8000/addUser/",
+                                    "Show User": "http://127.0.0.1:8000/showUser/",}}
+
+
+
+
+
+            else:
+                ctx = {'menues': ["Client","Product"],
+                        'menu_client': {"Add Client": "http://127.0.0.1:8000/addClient/",
+                                        "Show Client": "http://127.0.0.1:8000/showClient/"},
+                         'menu_product':{"Add Product": "http://127.0.0.1:8000/addProduct/",
+                                        "Show Product": "http://127.0.0.1:8000/showProduct/"},}
+
+
+
+            return render(request, 'MainMenu.html', ctx)

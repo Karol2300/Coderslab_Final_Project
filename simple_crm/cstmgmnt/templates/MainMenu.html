@@ -1,0 +1,53 @@
+{% extends 'menu_base.html' %}
+{% block title %} <h1> Simple CRM / Main Menu  </h1> {% endblock %}
+
+{% block menu_1 %}
+
+    <table>
+            <tbody>
+                <tr><td><h2>{{ menues.0 }}</h2> </td></tr>
+            {% for key, value in menu_client.items %}
+            <tr>
+            <td> <a href="{{ value }}">{{ key }}</a> </td>
+                {% endfor %}
+            </tr>
+            </tr>
+
+            { <tr><td><h2>{{ menues.1 }}</h2> </td></tr>
+            {% for key, value in menu_product.items %}
+            <tr>
+            <td> <a href="{{ value }}">{{ key }}</a> </td>
+                {% endfor %}
+            </tr>
+            </tr>
+            { <tr><td><h2>{{ menues.2 }}</h2> </td></tr>
+            {% for key, value in menu_pricing_plan.items %}
+            <tr>
+            <td> <a href="{{ value }}">{{ key }}</a> </td>
+                {% endfor %}
+            </tr>
+            </tr>
+            { <tr><td><h2>{{ menues.3 }}</h2> </td></tr>
+            {% for key, value in menu_investment.items %}
+            <tr>
+            <td> <a href="{{ value }}">{{ key }}</a> </td>
+                {% endfor %}
+            </tr>
+            </tr>
+             { <tr><td><h2>{{ menues.4 }}</h2> </td></tr>
+            {% for key, value in menu_salesperson.items %}
+            <tr>
+            <td> <a href="{{ value }}">{{ key }}</a> </td>
+                {% endfor %}
+            </tr>
+            </tr>
+             { <tr><td><h2>{{ menues.5 }}</h2> </td></tr>
+            {% for key, value in menu_user.items %}
+            <tr>
+            <td> <a href="{{ value }}">{{ key }}</a> </td>
+                {% endfor %}
+            </tr>
+            </tr>
+            </tbody>
+    </table>
+{% endblock %}
