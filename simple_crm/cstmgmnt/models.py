@@ -1,6 +1,4 @@
-
 from django.utils import timezone
-
 
 from django.db import models
 
@@ -10,7 +8,7 @@ from django.contrib.auth.models import User
 contact_type = [
     ('email', 'email'),
     ('phone', 'phone'),
-    ]
+]
 
 
 class Client(models.Model):
@@ -29,11 +27,11 @@ class Client(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name} "
 
+
 class ClientProductThrough(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    date_of_link = models.DateTimeField(default=timezone.now(),null=False)
-
+    date_of_link = models.DateTimeField(default=timezone.now(), null=False)
 
 
 class SalesPerson(models.Model):
@@ -44,23 +42,13 @@ class SalesPerson(models.Model):
     investments = models.ManyToManyField(InvestmentProject)
     products = models.ManyToManyField(Product, through='SalesPersonProduct')
     clients = models.ManyToManyField(Client)
-    users = models.OneToOneField(User,on_delete=models.CASCADE)
+    users = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name} "
+
 
 class SalesPersonProduct(models.Model):
     salesperson = models.ForeignKey(SalesPerson, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     date_of_link = models.DateTimeField(default=timezone.now(), null=False)
-
-
-
-
-
-
-
-
-
-
-

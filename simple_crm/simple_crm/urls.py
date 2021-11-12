@@ -16,8 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from cstmgmnt.views import AddClient,AddSalesPerson,ShowClientData,ShowClient,ShowSalesPerson, ShowSalesPersonData, ValidateUser
-from reports.views import AddProduct, AddInvestmentProject, AddPricingPlan, ShowProduct, ShowProductData,ShowMenu, ShowInvestment, ShowInvestmentData,AddUser,ShowUser,ShowUserData
+from cstmgmnt.views import AddClient, AddSalesPerson, ShowClientData, ShowClient, ShowSalesPerson, ShowSalesPersonData, \
+    ValidateUser
+from reports.views import AddProduct, AddInvestmentProject, AddPricingPlan, ShowProduct, ShowProductData, ShowMenu, \
+    ShowInvestment, ShowInvestmentData, AddUser, ShowUser, ShowUserData, SearchApartment
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,6 +41,7 @@ urlpatterns = [
     path('showUser/', ShowUser.as_view()),
     path('editUser/<str:user_id>', ShowUserData.as_view()),
     path('loginPage/', ValidateUser.as_view()),
+    path('productSearch/', SearchApartment.as_view()),
     path('MainMenu/', ShowMenu.as_view()),
 
 
