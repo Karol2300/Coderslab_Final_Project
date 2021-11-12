@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="UTF-8" >
-    <title>{% block title %} Simpe CRM {% endblock %}</title>
+    <title>{% block title %}  {% endblock %}</title>
 </head>
 <body>
 
@@ -14,7 +14,11 @@
                 {% block message %} {% endblock %}
 
 </body>
-<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br>
+<br>
+<br>
+<br>
+<br>
+<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br><br><br>
     <form  method="POST">
         {% csrf_token %}
         <button type="submit" name="logout"> Login\Logout

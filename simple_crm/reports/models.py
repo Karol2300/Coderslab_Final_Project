@@ -33,10 +33,10 @@ available_rooms = [
     ]
 
 overall_apartment_score = [
-    ('6', '60%'),
-    ('7', '70%'),
-    ('8', '80%'),
-    ('9', '90%'),
+    ('60%', '60%'),
+    ('70%', '70%'),
+    ('80%', '80%'),
+    ('90%', '90%'),
     ]
 
 direction = [
@@ -87,9 +87,9 @@ class Product(models.Model):
     direction = models.CharField(max_length=128, choices=direction, null=False)
     floor = models.CharField(max_length=128, choices=available_floor,  null=False)
     number_of_rooms = models.CharField(max_length=128, choices=available_rooms, null=False)
-    rating = models.CharField(max_length=128, choices=overall_apartment_score,null=False)
-    balcony = models.BooleanField(null=False)
-    loggia = models.BooleanField(null=False)
+    rating = models.CharField(max_length=128, choices=overall_apartment_score, null=False)
+    balcony = models.BooleanField(default=False)
+    loggia = models.BooleanField(default=False)
     status = models.CharField(max_length=128, choices=product_status, null=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=False)
     investments = models.ForeignKey(InvestmentProject, on_delete=models.CASCADE)
@@ -100,7 +100,7 @@ class Product(models.Model):
 class PricingPlan(models.Model):
     pricing_plan_name = models.CharField(max_length=128)
     pricing_plan_code = models.CharField(max_length=128)
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(default=False)
     nett_price = models.DecimalField(max_digits=128, decimal_places=2)
     gross_price = models.DecimalField(max_digits=128, decimal_places=2)
     nett_price_per_sqm = models.DecimalField(max_digits=128, decimal_places=2)

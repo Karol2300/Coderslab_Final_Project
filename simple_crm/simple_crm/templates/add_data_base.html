@@ -17,14 +17,15 @@
     <table>
         <tbody>
             <tr> {% block form %} Form {% endblock form %} </tr>
-            <tr> {% block message %} Message {% endblock message %} </tr>
+            <tr> {% block message %}  {% endblock message %} </tr>
         </tbody>
     </table>
 
 
 </body>
-<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br>
-    <form  method="POST">
+<br><br>
+<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br><br>
+    <form  method="POST" id="logout_form">
         {% csrf_token %}
         <button type="submit" name="logout"> Logout </button>
     </form>

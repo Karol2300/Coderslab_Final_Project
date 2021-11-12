@@ -11,11 +11,12 @@
                  {% block second_action %} Second Action Name {% endblock %}
                 {% block third_action %} {% endblock %}
                 {% block fourth_action %}  {% endblock %}
-                {% block info %} info  {% endblock %}
+                {% block info %}   {% endblock %}
 
 
 </body>
-<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br>
+<br><br>
+<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br><br>
     <form  method="POST">
         {% csrf_token %}
         <button type="submit" name="logout"> Logout

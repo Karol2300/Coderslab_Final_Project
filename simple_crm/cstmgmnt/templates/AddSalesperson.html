@@ -14,11 +14,13 @@
                             {{ form_2 }}
                         <tr></tr>
                         <tr>
-                            <td><button type="submit"> Submit </button> <button type="reset" > Reset! </button></td>
+                            <td><button type="submit" name="add_salesperson"> Submit </button> <button type="reset" > Reset! </button></td>
                         </tr>
 
                     </tbody>
                 </table>
             </form>
 {% endblock %}
-
+{% block message %}
+{{ message }}
+{% endblock %}

@@ -19,9 +19,12 @@
 </form>
 
 {% endblock %}
+{% block info %}
+{{ message }}
+{% endblock %}
 {% block third_action %}
 <br>
-<form action="http://127.0.0.1:8000/index/">
+<form action="http://127.0.0.1:8000/MainMenu/">
     <input type="submit" value="Main menu" />
 </form>
 <br>
