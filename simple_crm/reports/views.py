@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1, PricingPlanForm_2, \
     EditProductForm_1, EditInvestmentForm, UserForm, UserFormPassword, SalesFilterForm
+
 from django.views import View
 from reports.models import Product, PricingPlan, InvestmentProject
 from cstmgmnt.forms import PickInvestment
@@ -412,7 +413,7 @@ class ShowMenu(LoginRequiredMixin, View):
             if user_type.is_superuser:
 
                 ctx = {'menues': ["Client", "Product", 'Pricing Plan',
-                                  'Investment Project', 'Salesperson', 'User'],
+                                  'Investment Project', 'Salesperson', 'User', 'Reporting'],
                        'menu_client': {"Add Client": "http://127.0.0.1:8000/addClient/",
                                        "Show Client": "http://127.0.0.1:8000/showClient/"},
                        'menu_product': {"Add Product": "http://127.0.0.1:8000/addProduct/",
@@ -423,15 +424,23 @@ class ShowMenu(LoginRequiredMixin, View):
                        'menu_salesperson': {"Show Salesperson": "http://127.0.0.1:8000/showSalesPerson/",
                                             "Add Salesperson": "http://127.0.0.1:8000/addSalesPerson/", },
                        'menu_user': {"Add User": "http://127.0.0.1:8000/addUser/",
-                                     "Show User": "http://127.0.0.1:8000/showUser/", }}
+                                     "Show User": "http://127.0.0.1:8000/showUser/", },
+
+                       'menu_reporting': {"Search Product": "http://127.0.0.1:8000/productSearch/",
+                                     "Project Sales Analysis": "http://127.0.0.1:8000/salesAnalysis/", }
+                       }
 
 
             else:
-                ctx = {'menues': ["Client", "Product"],
+                ctx = {'menues': ["Client", "Product","Reporting"],
                        'menu_client': {"Add Client": "http://127.0.0.1:8000/addClient/",
                                        "Show Client": "http://127.0.0.1:8000/showClient/"},
                        'menu_product': {"Add Product": "http://127.0.0.1:8000/addProduct/",
-                                        "Show Product": "http://127.0.0.1:8000/showProduct/"}, }
+                                        "Show Product": "http://127.0.0.1:8000/showProduct/"},
+
+                       'menu_reporting': {"Search Product": "http://127.0.0.1:8000/productSearch/",
+                                          "Project Sales Analysis": "http://127.0.0.1:8000/salesAnalysis/", }
+                       }
 
             return render(request, 'MainMenu.html', ctx)
 
@@ -504,62 +513,109 @@ class SearchApartment(LoginRequiredMixin, View):
             return redirect('/loginPage/')
 
 class ProjectSalesAnalysis(LoginRequiredMixin, View):
+
     def get(self, request):
         if request.method == 'GET':
             product_by_investment_form = PickInvestment()
-            filters = SalesFilterForm()
-            ctx = {'product_by_investment_form': product_by_investment_form,
-                          'sales_filter_form': filters,}
-            return render(request, 'SearchProduct.html', ctx)
+            # filters = SalesFilterForm()
+            ctx = {'product_by_investment_form': product_by_investment_form,}
+            return render(request, 'ProjectSalesAnalysis.html', ctx)
 
 
     def post(self, request):
-        if request.method == "POST" and PickInvestment(request.POST) and SalesFilterForm(request.POST):
+        # actual_user = request.user
+        # user_id = actual_user.id
+        # user_id_from_investemnt project
+        # if actual_user.is_authenticated:
+        #     ctx_2 = {"username": name}
+        #
+        # else:
+        #     ctx_2 = {"username": "Anonymus User"}
+        # return ctx_2
+        if request.method == "POST" and PickInvestment(request.POST):
             data = PickInvestment(request.POST)
-            filter = SalesFilterForm(request.POST)
-            apartment_size = filter.data["area_range"]
-            if apartment_size == '0-30':
-                range_min = 0
-                range_max = 30
-                size = (range_min, range_max)
-            elif apartment_size == '30-40':
-                range_min = 30
-                range_max = 40
-                size = (range_min, range_max)
-            elif apartment_size == '40-55':
-                range_min = 40
-                range_max = 55
-                size = (range_min, range_max)
-            elif apartment_size == '55-75':
-                range_min = 55
-                range_max = 75
-                size = (range_min, range_max)
-            elif apartment_size == '75-100':
-                range_min = 75
-                range_max = 100
-                size = (range_min, range_max)
-            elif apartment_size == '100-140':
-                range_min = 100
-                range_max = 140
-                size = (range_min, range_max)
-            else:
-                range_min = 0
-                range_max = 500
-                size = (range_min, range_max)
-
-            if data.is_valid() and filter.is_valid() and len(Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),\
-                    number_of_rooms=filter.data['number_of_rooms'] \
-                    ,status=filter.data['status'],floor=filter.data['floor'],area__gt=size[0],area__lte=size[1]).order_by('code')) > 0:
+            # actual_user = request.user
+            # user_id = actual_user.id
+            # user_id_from_investment =
+            if data.is_valid() and len(Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code')) > 0:
                 product = Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),\
-                    number_of_rooms=filter.data['number_of_rooms'] \
-                    ,status=filter.data['status'],floor=filter.data['floor'],area__gt=size[0],area__lte=size[1]).order_by('code')
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code')
                 products = [val for val in product]
-                return render(request, 'SearchProduct.html', {'products': products, })
+
+                sold_products_qty = len(Product.objects.all().filter(
+                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold'))
+                reserved_products_qty = len(Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved'))
+                available_products_qty = len(Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available'))
+                sold_products_area = Product.objects.all().filter(
+                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold').values_list("area")
+                reserved_products_area = Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved').values_list("area")
+                available_products_area = Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available').values_list("area")
+
+
+                sold_products_value = Product.objects.all().filter(
+                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold').values_list("price")
+                reserved_products_value = Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved').values_list("price")
+                available_products_value = Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available').values_list("price")
+
+                total_apartments_qty = sold_products_qty + reserved_products_qty + available_products_qty
+                sold_products_share = f"{round(float(sold_products_qty/total_apartments_qty*100),2)} %"
+                reserved_products_share = f"{round(float(reserved_products_qty/total_apartments_qty*100),2)} %"
+                available_products_share = f"{round(float(available_products_qty/total_apartments_qty*100),2)} %"
+
+
+                sold_products_area_val = sum([val[0] for val in sold_products_area])
+                reserved_products_area_val = sum([val[0] for val in reserved_products_area])
+                available_products_area_val = sum([val[0] for val in available_products_area])
+                total_apartments_area_val = sold_products_area_val + reserved_products_area_val + available_products_area_val
+
+                sold_products_area_share = f"{round(float(sold_products_area_val / total_apartments_area_val * 100), 2)} %"
+                reserved_products_area_share = f"{round(float(reserved_products_area_val / total_apartments_area_val * 100), 2)} %"
+                available_products_area_share = f"{round(float(available_products_area_val / total_apartments_area_val * 100), 2)} %"
+
+                sold_products_val = sum([val[0] for val in sold_products_value])
+                reserved_products_val = sum([val[0] for val in reserved_products_value])
+                available_products_val = sum([val[0] for val in available_products_value])
+                total_apartments_val = sold_products_val + reserved_products_val + available_products_val
+
+                average_sold_price_per_sqm = f"{round(float(sold_products_val / sold_products_area_val), 2)} PLN"
+                average_reserved_price_per_sqm = f"{round(float(reserved_products_val / reserved_products_area_val), 2)} PLN"
+                average_available_price_per_sqm = f"{round(float(available_products_val / available_products_area_val), 2)} PLN"
+                average_total_price_per_sqm = f"{round(float(total_apartments_val / total_apartments_area_val), 2)} PLN"
+
+                ctx = {'products': products,
+                       'total_apartments_quantity': total_apartments_qty,
+                       'sold_apartments_quantity': sold_products_qty,
+                       'reserved_apartments_quantity': reserved_products_qty,
+                       'available_apartments_quantity': available_products_qty,
+                       'sold_products_share' : sold_products_share,
+                       'reserved_products_share' : reserved_products_share,
+                        'available_products_share': available_products_share,
+                       'total_apartments_area' :f"{total_apartments_area_val} sqm",
+                       'sold_apartments_area' : f"{sold_products_area_val} sqm",
+                        'reserved_apartments_area': f"{reserved_products_area_val} sqm",
+                       'available_apartments_area': f"{available_products_area_val} sqm",
+                        'sold_apartments_area_share' : sold_products_area_share,
+                        'reserved_apartments_area_share': reserved_products_area_share,
+                       'available_apartments_area_share': available_products_area_share,
+                        'total_apartments_val': total_apartments_val,
+                        'sold_products_val': sold_products_val,
+                        'reserved_products_val': reserved_products_val,
+                        'available_products_val': available_products_val,
+                        'average_total_price_per_sqm': average_total_price_per_sqm,
+                        'average_sold_price_per_sqm' : average_sold_price_per_sqm,
+                        'average_reserved_price_per_sqm' : average_reserved_price_per_sqm,
+                        'average_available_price_per_sqm' : average_available_price_per_sqm,}
+                return render(request, 'SalesAnalysisPerProject.html', ctx)
             else:
                 message = f"No products found!"
-                return render(request, 'SearchProduct.html', {'message': message})
+                return render(request, 'SalesAnalysisPerProject.html', {'message': message})
 
         elif request.method == "POST" and 'logout' in request.POST:
             logout(request)

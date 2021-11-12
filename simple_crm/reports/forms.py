@@ -98,14 +98,35 @@ class SalesFilterForm(forms.Form):
     floor = forms.ChoiceField(choices=available_floor)
 
 
-class SalesFilterAreaForm(forms.Form):
-    area_range = forms.ChoiceField(choices=apartment_type)
+# class SalesFilterAreaForm(forms.Form):
+#     area_range = forms.ChoiceField()
+#
+# class SalesFilterStatusForm(forms.Form):
+#     status = forms.ChoiceField()
+#
+# class SalesFilterRoomsForm(forms.Form):
+#     number_of_rooms = forms.ChoiceField()
+#
+# class SalesFilterFloorForm(forms.Form):
+#     floor = forms.ChoiceField()
 
-class SalesFilterStatusForm(forms.Form):
-    status = forms.ChoiceField(choices=product_status)
-
-class SalesFilterRoomsForm(forms.Form):
-    number_of_rooms = forms.ChoiceField(choices=available_rooms)
-
-class SalesFilterFloorForm(forms.Form):
-    floor = forms.ChoiceField(choices=available_floor)
+# class SalesFilterAreaForm(ModelForm):
+#     class Meta:
+#         model = Product
+#         fields = ['area']
+#         # area_range = forms.ChoiceField()
+#
+# class SalesFilterStatusForm(ModelForm):
+#     class Meta:
+#         model = Product
+#         fields = ['status']
+#
+# class SalesFilterRoomsForm(ModelForm):
+#     class Meta:
+#         model = Product
+#         fields = ['number_of_rooms']
+#
+# class SalesFilterFloorForm(ModelForm):
+#     class Meta:
+#         model = Product
+#         fields = ['floor']
