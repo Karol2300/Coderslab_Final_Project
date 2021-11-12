@@ -1,0 +1,25 @@
+{% extends 'add_data_base.html' %}
+{% block title %} <h1> Simple CRM / Login  </h1> {% endblock title %}
+{% block action %}
+
+<h2> Simple CRM Login Form</h2>
+
+{% endblock %}
+
+{% block form %}
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tbody>
+                    {{ login_form }}
+                    <tr>
+                        <td> <button type="submit"> Submit </button> <button type="reset" > Reset! </button></td>
+                    </tr>
+            </tbody>
+        </table>
+    </form>
+{% endblock %}
+
+{% block message %} {{ message}} {% endblock %}
+
+

@@ -1,0 +1,27 @@
+{% extends 'add_data_base.html' %}
+{% block title %} <h1> Simple CRM / Add User  </h1> {% endblock title %}
+{% block action %}
+
+<h2> Please fill new user data</h2>
+
+{% endblock %}
+
+{% block form %}
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tbody>
+                    {{ form_1 }}
+                    {{ form_2 }}
+
+                    <tr>
+                        <td> <button type="submit" name="add_user"> Add user </button> <button type="reset" > Reset! </button></td>
+                    </tr>
+            </tbody>
+        </table>
+    </form>
+{% endblock %}
+
+{% block message %} {{ message}} {% endblock %}
+
+

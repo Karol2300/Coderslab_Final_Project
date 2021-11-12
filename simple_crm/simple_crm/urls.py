@@ -16,6 +16,32 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from cstmgmnt.views import AddClient,AddSalesPerson,ShowClientData,ShowClient,ShowSalesPerson, ShowSalesPersonData, ValidateUser
+from reports.views import AddProduct, AddInvestmentProject, AddPricingPlan, ShowProduct, ShowProductData,ShowMenu, ShowInvestment, ShowInvestmentData,AddUser,ShowUser,ShowUserData
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('index/', ValidateUser.as_view()),
+    path('addSalesPerson/', AddSalesPerson.as_view()),
+    path('showSalesPerson/', ShowSalesPerson.as_view()),
+    path('showSalesPerson/<str:salesperson_id>/', ShowSalesPersonData.as_view()),
+    path('addClient/', AddClient.as_view()),
+    path('showClient/<str:client_id>/', ShowClientData.as_view()),
+    path('showClient/', ShowClient.as_view()),
+    path('addProduct/', AddProduct.as_view()),
+    path('addInvestmentProject/', AddInvestmentProject.as_view()),
+    path('addPricingPlan/', AddPricingPlan.as_view()),
+    path('showProduct/', ShowProduct.as_view()),
+    path('showProduct/<str:product_id>', ShowProductData.as_view()),
+    path('showInvestmentProject/', ShowInvestment.as_view()),
+    path('showInvestmentProject/<str:investment_id>', ShowInvestmentData.as_view()),
+    path('addUser/', AddUser.as_view()),
+    path('showUser/', ShowUser.as_view()),
+    path('editUser/<str:user_id>', ShowUserData.as_view()),
+    path('loginPage/', ValidateUser.as_view()),
+    path('MainMenu/', ShowMenu.as_view()),
+
+
+
+
 ]

@@ -1,0 +1,34 @@
+{% extends 'show_data_base.html' %}
+{% block title %} <h1> Simple CRM / Pick Investment Project  </h1> {% endblock %}
+{% block action %}
+    <h2> Pick investment from the list </h2>
+{% endblock %}
+{% block second_action %}
+<form name="pick_investment" method="POST" >
+  {% csrf_token %}
+    <table>
+    <tbody>
+        <tr>
+           <td>{{ product_by_investment_form }}</td>
+        </tr>
+        <tr>
+            <td><button type="submit" name="investment_form"> Submit </button> </td>
+        </tr>
+          </tbody>
+    </table>
+</form>
+
+{% endblock %}
+{% block third_action %}
+<br>
+<form action="http://127.0.0.1:8000/index/">
+    <input type="submit" value="Main menu" />
+</form>
+<br>
+{% endblock %}
+
+
+
+
+
+

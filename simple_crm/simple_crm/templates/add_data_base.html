@@ -2,25 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" >
-    <title>{% block title %} Simpe CRM {% endblock %}</title>
+    <title>{% block title %} Simple CRM {% endblock title %}</title>
 
 </head>
 <body>
     <table>
         <tbody>
             <tr>
-                <td> {% block action %} Action Name {% endblock %}</td>
-                <td> {% block second_action %} Second Action Name {% endblock %} </td>
+                <td> {% block action %} Action Name {% endblock action %}</td>
+<!--                <td> {% block second_action %} Second Action Name {% endblock %} </td>-->
             </tr>
         </tbody>
     </table>
     <table>
         <tbody>
-            <tr> {% block form %} Form {% endblock %} </tr>
-            <tr> {% block message %} Message {% endblock %} </tr>
+            <tr> {% block form %} Form {% endblock form %} </tr>
+            <tr> {% block message %}  {% endblock message %} </tr>
         </tbody>
     </table>
 
 
 </body>
+<br><br>
+<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br><br>
+    <form  method="POST" id="logout_form">
+        {% csrf_token %}
+        <button type="submit" name="logout"> Logout </button>
+    </form>
+</footer>
 </html>
