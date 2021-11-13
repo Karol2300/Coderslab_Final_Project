@@ -25,9 +25,18 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 
 
 class AddClient(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+        result : add client to client table,
+        requirements_1 : user must be logged in (LoginRequiredMixin),
+        requirements_2: user must have permission"""
+
     permission_required = ('cstmgmnt.add_client')
 
     def get(self, request):
+        """class  method,
+            result : show add client forms,
+            requirements: user must have permission"""
+
         form_1 = ClientForm_1
         form_2 = ClientForm_2
         if request.method == 'GET' and request.user.has_perm('cstmgmnt.add_client'):
@@ -40,6 +49,10 @@ class AddClient(LoginRequiredMixin, PermissionRequiredMixin, View):
                 'message': message})
 
     def post(self, request):
+        """class  method,
+            result : add client to client list,
+            requirements: user must have permission"""
+
         form_1 = ClientForm_1(request.POST)
         form_2 = ClientForm_2(request.POST)
 
@@ -75,9 +88,18 @@ class AddClient(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowClient(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+            result : clients list per investment project,
+            requirements_1 : user must be logged in (LoginRequiredMixin),
+            requirements_2: user mus have permission
+              """
     permission_required = ('cstmgmnt.view_client', 'cstmgmnt.change_client')
 
     def get(self, request):
+        """class  method,
+            result : show pick investment form,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and request.user.has_perm('cstmgmnt.view_client') and \
                 request.user.has_perm('cstmgmnt.change_client'):
             client_by_investment_form = PickInvestment()
@@ -85,6 +107,10 @@ class ShowClient(LoginRequiredMixin, PermissionRequiredMixin, View):
                           {'client_by_investment_form': client_by_investment_form, })
 
     def post(self, request):
+        """class  method,
+            result : show list of clients per investment, generate links to edit/delete client,
+            requirements: user must have permission"""
+
         if request.method == "POST" and PickInvestment(request.POST) and 'investment_form' in request.POST and \
                 request.user.has_perm('cstmgmnt.view_client') and request.user.has_perm('cstmgmnt.change_client'):
             data = PickInvestment(request.POST)
@@ -116,10 +142,19 @@ class ShowClient(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowClientData(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+       result : client details, edit client, delete client
+       requirements_1 : user must be logged in (LoginRequiredMixin),
+       requirements_2: user mus have permission
+    """
     permission_required = (
     'cstmgmnt.change_client', 'cstmgmnt.view_client', 'cstmgmnt.delete_client', 'cstmgmnt.add_client')
 
     def get(self, request, *args, **kwargs):
+        """class  method,
+        result : show list of clients per investment, generate links to edit/delete client,
+        requirements: user must have permission"""
+
         if request.method == 'GET' and kwargs['client_id'] and request.user.has_perm(
                 'cstmgmnt.view_client') and request.user.has_perm('cstmgmnt.change_client') and request.user.has_perm(
                 'cstmgmnt.delete_client') and request.user.has_perm('cstmgmnt.add_client'):
@@ -134,6 +169,10 @@ class ShowClientData(LoginRequiredMixin, PermissionRequiredMixin, View):
             return render(request, 'ShowClient.html', {'message': message, })
 
     def post(self, request, *args, **kwargs):
+        """class  method,
+                result : show client details form, edit client ,delete client,
+                requirements: user must have permission"""
+
         if request.method == "POST" and EditClientForm_1(request.POST) and ClientForm_2(request.POST) \
                 and 'save_client_data' in request.POST and request.user.has_perm(
             'cstmgmnt.view_client') and request.user.has_perm('cstmgmnt.change_client') and request.user.has_perm(
@@ -178,10 +217,18 @@ class ShowClientData(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class AddSalesPerson(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+           result : add salesperson to salesperson
+           requirements_1 : user must be logged in (LoginRequiredMixin),
+           requirements_2: user mus have permission
+        """
     permission_required = ('cstmgmnt.change_salesperson', 'cstmgmnt.view_salesperson', 'cstmgmnt.add_salesperson',
                            'cstmgmnt.delete_salesperson')
 
     def get(self, request):
+        """class  method,
+            result : show add client forms,
+            requirements: user must have permission"""
         if request.method == 'GET' and request.user.has_perm('cstmgmnt.change_salesperson') and request.user.has_perm(
                 'cstmgmnt.add_salesperson'):
             form_1 = SalesPersonForm_1()
@@ -190,6 +237,10 @@ class AddSalesPerson(LoginRequiredMixin, PermissionRequiredMixin, View):
                                                            'form_2': form_2, })
 
     def post(self, request):
+        """class  method,
+           result : add client to clients list,
+           requirements: user must have permission"""
+
         if request.method == "POST" and 'add_salesperson' in request.POST and request.user.has_perm(
                 'cstmgmnt.add_salesperson') and request.user.has_perm('cstmgmnt.change_salesperson'):
             form_1 = SalesPersonForm_1(request.POST)
@@ -219,14 +270,25 @@ class AddSalesPerson(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowSalesPerson(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+       result : show salesperson list
+       requirements_1 : user must be logged in (LoginRequiredMixin),
+       requirements_2: user mus have permission"""
+
     permission_required = ('cstmgmnt.change_salesperson', 'cstmgmnt.view_salesperson')
 
     def get(self, request):
+        """class  method,
+            result : show pick investment form,
+            requirements: user must have permission"""
         if request.method == 'GET' and request.user.has_perm(permission_required):
             salesperson_form = PickInvestment()
             return render(request, 'ShowSalesperson_pick_investment.html', {'salesperson_form': salesperson_form, })
 
     def post(self, request):
+        """class  method,
+            result : show salesperson list per investment,
+            requirements: user must have permission"""
         if request.method == "POST" and PickInvestment(request.POST) and 'salesperson_form' in request.POST and \
                 request.user.has_perm('cstmgmnt.change_salesperson') and request.user.has_perm(
             'cstmgmnt.view_salesperson'):
@@ -247,10 +309,19 @@ class ShowSalesPerson(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowSalesPersonData(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+      result : show salesperson details, edit salesperson, delete_salesperson,
+      requirements_1 : user must be logged in (LoginRequiredMixin),
+      requirements_2: user mus have permission"""
+
     permission_required = ('cstmgmnt.change_salesperson', 'cstmgmnt.view_salesperson', 'cstmgmnt.edit_salesperson',
                            'cstmgmnt.delete_salesperson')
 
     def get(self, request, *args, **kwargs):
+        """class  method,
+            result : show salesperson data form,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and kwargs['salesperson_id'] and request.user.has_perm('cstmgmnt.change_salesperson') \
                 and request.user.has_perm('cstmgmnt.view_salesperson'):
             salesperson_id = kwargs['salesperson_id']
@@ -265,6 +336,10 @@ class ShowSalesPersonData(LoginRequiredMixin, PermissionRequiredMixin, View):
             return render(request, 'ShowSalespersonDetails.html', {'message': message, })
 
     def post(self, request, *args, **kwargs):
+        """class  method,
+            result : show salesperson details form, edit client ,delete client,
+            requirements: user must have permission"""
+
         if request.method == "POST" and EditSalesPersonForm_1(request.POST) and SalesPersonForm_2(request.POST) \
                 and 'save_salesperson_data' in request.POST and request.user.has_perm('cstmgmnt.change_salesperson') \
                 and request.user.has_perm('cstmgmnt.add_salesperson') \
@@ -319,12 +394,20 @@ class ShowSalesPersonData(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ValidateUser(View):
+    """class based view,
+      result : validate user"""
 
     def get(self, request):
+        """ class method
+            result : show validation form"""
+
         if request.method == "GET":
             return render(request, 'Login.html', {'login_form': LoginForm})
 
     def post(self, request):
+        """ class method
+            result : show validation result"""
+
         if request.method == "POST":
             form = LoginForm(request.POST)
             username = form['username'].value()

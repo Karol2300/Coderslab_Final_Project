@@ -14,10 +14,19 @@ from django.shortcuts import redirect
 
 
 class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+    result : add product to project investment,
+    requirements_1 : user must be logged in (LoginRequiredMixin),
+    requirements_2: user mus have permission
+      """
     permission_required = (
         'reports.add_product', 'reports.view_product', 'reports.delete_product', 'reports.change_product',)
 
     def get(self, request):
+        """class  method,
+            result : show add product forms,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and request.user.has_perm('reports.add_product') and \
                 request.user.has_perm('reports.view_product'):
             form_1 = ProductForm_1
@@ -27,6 +36,10 @@ class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
                                                        'form_2': form_2, })
 
     def post(self, request):
+        """class  method,
+            result : show add product result,
+            requirements: user must have permission"""
+
         if request.method == "POST" and 'add_product' in request.POST \
                 and request.user.has_perm('reports.add_product') and request.user.has_perm('reports.view_product'):
             form_1 = ProductForm_1(request.POST)
@@ -63,16 +76,29 @@ class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class AddInvestmentProject(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+        result : add new investment to project investment table,
+        requirements_1 : user must be logged in (LoginRequiredMixin),
+        requirements_2: user mus have permission
+          """
     permission_required = ('reports.add_investmentproject', 'reports.view_investmentproject', \
                            'reports.change_investmentproject', 'reports.delete_investmentproject')
 
     def get(self, request):
+        """class  method,
+            result : show add investment projects form,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and request.user.has_perm('reports.add_investmentproject') and \
                 request.user.has_perm('reports.view_investmentproject'):
             form = InvestmentForm
             return render(request, 'AddInvestmentProject.html', {'form': form, })
 
     def post(self, request):
+        """class  method,
+            result : show add investment project to investment project table,
+            requirements: user must have permission"""
+
         if request.method == "POST" and 'add_project' in request.POST \
                 and request.user.has_perm('reports.add_investmentproject') and \
                 request.user.has_perm('reports.view_investmentproject'):
@@ -100,9 +126,18 @@ class AddInvestmentProject(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class AddPricingPlan(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+           result : add new pricing plan to project investment table,
+           requirements_1 : user must be logged in (LoginRequiredMixin),
+           requirements_2: user mus have permission
+             """
     permission_required = 'reports.add_pricingplan'
 
     def get(self, request):
+        """class  method,
+            result : show add pricing plan form to pricing plans,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and request.user.has_perm('reports.add_pricingplan'):
             form_1 = PricingPlanForm_1
             form_2 = PricingPlanForm_2
@@ -110,6 +145,10 @@ class AddPricingPlan(LoginRequiredMixin, PermissionRequiredMixin, View):
                                                            'form_2': form_2, })
 
     def post(self, request):
+        """class  method,
+            result : add pricing plan to pricing plan table,
+            requirements: user must have permission"""
+
         if request.method == "POST" and 'add_pricing_plan' in request.POST and \
                 request.user.has_perm('reports.add_pricingplan'):
             form_1 = PricingPlanForm_1(request.POST)
@@ -137,10 +176,19 @@ class AddPricingPlan(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+              result : show list of products per investment product table,
+              requirements_1 : user must be logged in (LoginRequiredMixin),
+              requirements_2: user mus have permission
+                """
     permission_required = ('reports.add_product', 'reports.view_product', 'reports.delete_product', \
                            'reports.change_product',)
 
     def get(self, request):
+        """class  method,
+            result : show pick investment form ,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and request.user.has_perm('reports.view_product') and \
                 request.user.has_perm('reports.change_product'):
             product_by_investment_form = PickInvestment()
@@ -148,6 +196,10 @@ class ShowProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
                           {'product_by_investment_form': product_by_investment_form, })
 
     def post(self, request):
+        """class  method,
+            result : show product list per investment project,
+            requirements: user must have permission"""
+
         if request.method == "POST" and PickInvestment(request.POST) and 'investment_form' in request.POST \
                 and request.user.has_perm('reports.view_product') and request.user.has_perm('reports.change_product'):
             data = PickInvestment(request.POST)
@@ -166,10 +218,19 @@ class ShowProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowProductData(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+                 result : show details of product, edit product, delete product
+                 requirements_1 : user must be logged in (LoginRequiredMixin),
+                 requirements_2: user mus have permission
+                   """
     permission_required = ('reports.view_product', 'reports.change_product', 'reports.delete_product',
                            'reports.add_product')
 
     def get(self, request, *args, **kwargs):
+        """class  method,
+            result : show product data form,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and kwargs['product_id'] and request.user.has_perm('reports.view_product') and \
                 request.user.has_perm('reports.change_product') and request.user.has_perm('reports.add_product'):
             product_id = kwargs['product_id']
@@ -183,9 +244,14 @@ class ShowProductData(LoginRequiredMixin, PermissionRequiredMixin, View):
         #     return render(request, 'ShowProductDetails.html', {'message': message, })
 
     def post(self, request, *args, **kwargs):
+        """class  method,
+            result : show product data, edit product, delete product,
+            requirements: user must have permission"""
+
         if request.method == "POST" and EditProductForm_1(request.POST) and ProductForm_2(request.POST) \
                 and 'save_product_data' in request.POST and request.user.has_perm('reports.view_product') and \
                 request.user.has_perm('reports.add_product') and request.user.has_perm('reports.change_product'):
+
             product_id = kwargs['product_id']
             form_1 = EditProductForm_1(request.POST)
             form_2 = ProductForm_2(request.POST)
@@ -225,10 +291,19 @@ class ShowProductData(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowInvestment(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+        result : show investment project list
+        requirements_1 : user must be logged in (LoginRequiredMixin),
+        requirements_2: user mus have permission"""
+
     permission_required = ('reports.view_investmentproject', 'reports.add_investmentproject', \
                            'reports.change_investmentproject', 'reports.delete_investmentproject')
 
     def get(self, request):
+        """class method,
+            result : show investment project list,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and request.user.has_perm('reports.view_investmentproject') and \
                 request.user.has_perm('reports.change_investmentproject'):
             investment_projects = InvestmentProject.objects.all()
@@ -237,6 +312,10 @@ class ShowInvestment(LoginRequiredMixin, PermissionRequiredMixin, View):
                           {'investments': investment_projects_ls, })
 
     def post(self, request):
+        """class method,
+            result : show investment project details form, edit investment project, delete investment project,
+            requirements: user must have permission"""
+
         if request.method == "POST" and PickInvestment(request.POST) and 'investment_form' in request.POST \
                 and request.user.has_perm('reports.view_investmentproject') and \
                 request.user.has_perm('reports.change_investmentproject'):
@@ -256,10 +335,19 @@ class ShowInvestment(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowInvestmentData(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+        result : show investment project details, edit investment project, delete investment project
+        requirements_1 : user must be logged in (LoginRequiredMixin),
+        requirements_2: user mus have permission"""
+
     permission_required = ('reports.view_investmentproject', 'reports.add_investmentproject', \
                            'reports.change_investmentproject', 'reports.delete_investmentproject')
 
     def get(self, request, *args, **kwargs):
+        """class method,
+            result : show investment project details form, edit investment project, delete investment project,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and kwargs['investment_id'] and \
                 request.user.has_perm('reports.view_investmentproject'):
             investment_id = kwargs['investment_id']
@@ -271,6 +359,10 @@ class ShowInvestmentData(LoginRequiredMixin, PermissionRequiredMixin, View):
             return render(request, 'ShowInvestmentDetails.html', {'message': message, })
 
     def post(self, request, *args, **kwargs):
+        """class method,
+            result : show investment project details edit investment project, delete investment project,
+            requirements: user must have permission"""
+
         if request.method == "POST" and EditInvestmentForm(request.POST) and 'save_investment_data' \
                 in request.POST and request.user.has_perm('reports.view_investmentproject') and \
                 request.user.has_perm('reports.change_investmentproject') and \
@@ -306,9 +398,18 @@ class ShowInvestmentData(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class AddUser(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+       result : add  user to users table,
+       requirements_1 : user must be logged in (LoginRequiredMixin),
+       requirements_2: user mus have permission"""
+
     permission_required = ('reports.add_user', 'reports.view_user')
 
     def get(self, request):
+        """class  method ,
+            result : show add user form,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and request.user.has_perm('reports.add_user') \
                 and request.user.has_perm('reports.view_user'):
             form_1 = UserForm
@@ -317,6 +418,10 @@ class AddUser(LoginRequiredMixin, PermissionRequiredMixin, View):
                                                     'form_2': form_2, })
 
     def post(self, request):
+        """class  method ,
+           result : add user to users table,
+           requirements: user must have permission"""
+
         if request.method == "POST" and 'add_user' in request.POST and request.user.has_perm('reports.add_user') \
                 and request.user.has_perm('reports.view_user'):
             form_1 = UserForm(request.POST)
@@ -340,9 +445,18 @@ class AddUser(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowUser(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+               result : show user list,
+               requirements_1 : user must be logged in (LoginRequiredMixin),
+               requirements_2: user mus have permission"""
+
     permission_required = ('reports.add_user', 'reports.view_user')
 
     def get(self, request):
+        """class  method ,
+            result : show user list,
+            requirements: user must have permission"""
+
         if request.method == 'GET' and request.user.has_perm('reports.add_user') \
                 and request.user.has_perm('reports.view_user'):
             users = User.objects.all()
@@ -352,9 +466,18 @@ class ShowUser(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowUserData(LoginRequiredMixin, PermissionRequiredMixin, View):
+    """class based view,
+                   result : show user details, edit user, delete user
+                   requirements_1 : user must be logged in (LoginRequiredMixin),
+                   requirements_2: user mus have permission"""
+
     permission_required = ('reports.add_user', 'reports.view_user', 'reports.delete_user')
 
     def get(self, request, *args, **kwargs):
+        """class  method ,
+           result : show user detail form ,
+           requirements: user must have permission"""
+
         if request.method == 'GET' and kwargs['user_id'] and request.user.has_perm('reports.add_user') \
                 and request.user.has_perm('reports.view_user'):
             user_id = kwargs['user_id']
@@ -368,6 +491,10 @@ class ShowUserData(LoginRequiredMixin, PermissionRequiredMixin, View):
             return render(request, 'ShowUserDetails.html', {'message': message, })
 
     def post(self, request, *args, **kwargs):
+        """class  method,
+           result : show user details, edit user , delete user
+           requirements: user must have permission"""
+
         if request.method == "POST" and UserForm(request.POST) and UserFormPassword(request.POST) \
                 and 'save_user_data' in request.POST and request.user.has_perm('reports.add_user') \
                 and request.user.has_perm('reports.view_user') and request.user.has_perm('reports.change_user'):
@@ -406,7 +533,16 @@ class ShowUserData(LoginRequiredMixin, PermissionRequiredMixin, View):
 
 
 class ShowMenu(LoginRequiredMixin, View):
+    """class based view,
+              result : show menu based on permissions granted for user,
+              requirements_1 : user must be logged in (LoginRequiredMixin),
+              requirements_2: user mus have permission"""
+
     def get(self, request):
+        """class  method,
+           result : show user menu,
+           requirements: user must have permission"""
+
         if request.method == "GET":
             user_type = request.user
 
@@ -445,13 +581,25 @@ class ShowMenu(LoginRequiredMixin, View):
             return render(request, 'MainMenu.html', ctx)
 
     def post(self, request):
+        """class  method,
+           result : menu for user,
+           requirements: user must have permission"""
+
         if request.method == "POST" and 'logout' in request.POST:
             logout(request)
             return redirect('/loginPage/')
 
 
 class SearchApartment(LoginRequiredMixin, View):
+    """class based view,
+        result : list of products filtered by user,
+        requirements_1 : user must be logged in (LoginRequiredMixin)"""
+
     def get(self, request):
+        """class  method,
+           result : show pick investment and filter form,
+           requirements: user must be logged in (LoginRequiredMixin)"""
+
         if request.method == 'GET':
             product_by_investment_form = PickInvestment()
             filters = SalesFilterForm()
@@ -461,52 +609,56 @@ class SearchApartment(LoginRequiredMixin, View):
 
 
     def post(self, request):
-        if request.method == "POST" and PickInvestment(request.POST) and SalesFilterForm(request.POST):
-            data = PickInvestment(request.POST)
-            filter = SalesFilterForm(request.POST)
-            apartment_size = filter.data["area_range"]
-            if apartment_size == '0-30':
+        """class  method,
+           result : show filtered data result,
+           requirements: user must be logged in (LoginRequiredMixin)"""
+
+        if request.method == "POST" and PickInvestment(request.POST) and SalesFilterForm(request.POST): #check method and forms
+            data = PickInvestment(request.POST) #get data from form
+            filter = SalesFilterForm(request.POST) #get data from form
+            apartment_size = filter.data["area_range"] #get apartment size from filter form
+            if apartment_size == '0-30': # check apartment area range
                 range_min = 0
                 range_max = 30
                 size = (range_min, range_max)
-            elif apartment_size == '30-40':
+            elif apartment_size == '30-40': # check apartment area range
                 range_min = 30
                 range_max = 40
                 size = (range_min, range_max)
-            elif apartment_size == '40-55':
+            elif apartment_size == '40-55': # check apartment area range
                 range_min = 40
                 range_max = 55
                 size = (range_min, range_max)
-            elif apartment_size == '55-75':
+            elif apartment_size == '55-75': # check apartment area range
                 range_min = 55
                 range_max = 75
                 size = (range_min, range_max)
-            elif apartment_size == '75-100':
+            elif apartment_size == '75-100': # check apartment area range
                 range_min = 75
                 range_max = 100
                 size = (range_min, range_max)
-            elif apartment_size == '100-140':
+            elif apartment_size == '100-140': # check apartment area range
                 range_min = 100
                 range_max = 140
-                size = (range_min, range_max)
+                size = (range_min, range_max) # check apartment area range
             else:
                 range_min = 0
                 range_max = 500
-                size = (range_min, range_max)
+                size = (range_min, range_max) # check apartment area range
 
             if data.is_valid() and filter.is_valid() and len(Product.objects.all().filter(
                     investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),\
                     number_of_rooms=filter.data['number_of_rooms'] \
-                    ,status=filter.data['status'],floor=filter.data['floor'],area__gt=size[0],area__lte=size[1]).order_by('code')) > 0:
+                    ,status=filter.data['status'],floor=filter.data['floor'],area__gt=size[0],area__lte=size[1]).order_by('code')) > 0: # filter validation
                 product = Product.objects.all().filter(
                     investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),\
                     number_of_rooms=filter.data['number_of_rooms'] \
-                    ,status=filter.data['status'],floor=filter.data['floor'],area__gt=size[0],area__lte=size[1]).order_by('code')
-                products = [val for val in product]
-                return render(request, 'SearchProduct.html', {'products': products, })
+                    ,status=filter.data['status'],floor=filter.data['floor'],area__gt=size[0],area__lte=size[1]).order_by('code') # get list of products according to filters
+                products = [val for val in product] # convert data into a list
+                return render(request, 'SearchProduct.html', {'products': products, }) # push filtered product list to html
             else:
                 message = f"No products found!"
-                return render(request, 'SearchProduct.html', {'message': message})
+                return render(request, 'SearchProduct.html', {'message': message}) # push message if no products found
 
         elif request.method == "POST" and 'logout' in request.POST:
             logout(request)
@@ -514,7 +666,15 @@ class SearchApartment(LoginRequiredMixin, View):
 
 class ProjectSalesAnalysis(LoginRequiredMixin, View):
 
+    """class based view,
+            result : set of sales statistics per project,
+            requirements_1 : user must be logged in (LoginRequiredMixin)"""
+
     def get(self, request):
+        """"class  method,
+           result : show pick investment form
+           requirements: user must be logged in (LoginRequiredMixin)"""
+
         if request.method == 'GET':
             product_by_investment_form = PickInvestment()
             # filters = SalesFilterForm()
@@ -523,6 +683,11 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
 
 
     def post(self, request):
+        """"class  method,
+           result : show sales results per investment
+           requirements: user must be logged in (LoginRequiredMixin)"""
+
+
         # actual_user = request.user
         # user_id = actual_user.id
         # user_id_from_investemnt project
@@ -532,62 +697,61 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
         # else:
         #     ctx_2 = {"username": "Anonymus User"}
         # return ctx_2
-        if request.method == "POST" and PickInvestment(request.POST):
-            data = PickInvestment(request.POST)
+        if request.method == "POST" and PickInvestment(request.POST):  # check request method and if form in request
+            data = PickInvestment(request.POST)  # get data frm form
             # actual_user = request.user
             # user_id = actual_user.id
             # user_id_from_investment =
             if data.is_valid() and len(Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code')) > 0:
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code')) > 0: # check if form is valid
                 product = Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code')
-                products = [val for val in product]
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code') # get product data
+                products = [val for val in product] # convert product data to a list
 
                 sold_products_qty = len(Product.objects.all().filter(
-                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold'))
+                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold')) # get sold products qty
                 reserved_products_qty = len(Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved'))
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved')) # get  reserved products qty
                 available_products_qty = len(Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available'))
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available')) # get available products qty
                 sold_products_area = Product.objects.all().filter(
-                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold').values_list("area")
+                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold').values_list("area") # get sold products area data
                 reserved_products_area = Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved').values_list("area")
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved').values_list("area") # get reserved products area data
                 available_products_area = Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available').values_list("area")
-
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available').values_list("area") # get available products area data
 
                 sold_products_value = Product.objects.all().filter(
-                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold').values_list("price")
+                    investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold').values_list("price") # get  sold products sales value data
                 reserved_products_value = Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved').values_list("price")
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='reserved').values_list("price") # get  reserved products sales value data
                 available_products_value = Product.objects.all().filter(
-                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available').values_list("price")
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id), status='available').values_list("price") # get  available products sales value data
 
-                total_apartments_qty = sold_products_qty + reserved_products_qty + available_products_qty
-                sold_products_share = f"{round(float(sold_products_qty/total_apartments_qty*100),2)} %"
-                reserved_products_share = f"{round(float(reserved_products_qty/total_apartments_qty*100),2)} %"
-                available_products_share = f"{round(float(available_products_qty/total_apartments_qty*100),2)} %"
+                total_apartments_qty = sold_products_qty + reserved_products_qty + available_products_qty # calculate total apartments quantity
+                sold_products_share = f"{round(float(sold_products_qty/total_apartments_qty*100),2)} %" # calculate sold apartments qty share
+                reserved_products_share = f"{round(float(reserved_products_qty/total_apartments_qty*100),2)} %" # calculate reseved apartments qty share
+                available_products_share = f"{round(float(available_products_qty/total_apartments_qty*100),2)} %" # calculate available apartments qty share
 
 
-                sold_products_area_val = sum([val[0] for val in sold_products_area])
-                reserved_products_area_val = sum([val[0] for val in reserved_products_area])
-                available_products_area_val = sum([val[0] for val in available_products_area])
-                total_apartments_area_val = sold_products_area_val + reserved_products_area_val + available_products_area_val
+                sold_products_area_val = sum([val[0] for val in sold_products_area]) # calculate sold apartments area
+                reserved_products_area_val = sum([val[0] for val in reserved_products_area]) # calculate reserved apartments area
+                available_products_area_val = sum([val[0] for val in available_products_area]) # calculate available apartments area
+                total_apartments_area_val = sold_products_area_val + reserved_products_area_val + available_products_area_val # calculate total apartments area
 
-                sold_products_area_share = f"{round(float(sold_products_area_val / total_apartments_area_val * 100), 2)} %"
-                reserved_products_area_share = f"{round(float(reserved_products_area_val / total_apartments_area_val * 100), 2)} %"
-                available_products_area_share = f"{round(float(available_products_area_val / total_apartments_area_val * 100), 2)} %"
+                sold_products_area_share = f"{round(float(sold_products_area_val / total_apartments_area_val * 100), 2)} %" # calculate sold apartments area share
+                reserved_products_area_share = f"{round(float(reserved_products_area_val / total_apartments_area_val * 100), 2)} %" # calculate reserved apartments area share
+                available_products_area_share = f"{round(float(available_products_area_val / total_apartments_area_val * 100), 2)} %" # calculate available apartments area share
 
-                sold_products_val = sum([val[0] for val in sold_products_value])
-                reserved_products_val = sum([val[0] for val in reserved_products_value])
-                available_products_val = sum([val[0] for val in available_products_value])
-                total_apartments_val = sold_products_val + reserved_products_val + available_products_val
+                sold_products_val = sum([val[0] for val in sold_products_value])  # calculate sold apartments value
+                reserved_products_val = sum([val[0] for val in reserved_products_value])  # calculate reserved apartments value
+                available_products_val = sum([val[0] for val in available_products_value])  # calculate available apartments value
+                total_apartments_val = sold_products_val + reserved_products_val + available_products_val  # calculate total apartments value
 
-                average_sold_price_per_sqm = f"{round(float(sold_products_val / sold_products_area_val), 2)} PLN"
-                average_reserved_price_per_sqm = f"{round(float(reserved_products_val / reserved_products_area_val), 2)} PLN"
-                average_available_price_per_sqm = f"{round(float(available_products_val / available_products_area_val), 2)} PLN"
-                average_total_price_per_sqm = f"{round(float(total_apartments_val / total_apartments_area_val), 2)} PLN"
+                average_sold_price_per_sqm = f"{round(float(sold_products_val / sold_products_area_val), 2)} PLN" # calculate sold apartments average price/sqm
+                average_reserved_price_per_sqm = f"{round(float(reserved_products_val / reserved_products_area_val), 2)} PLN" # calculate reserved apartments average price/sqm
+                average_available_price_per_sqm = f"{round(float(available_products_val / available_products_area_val), 2)} PLN" # calculate available apartments average price/sqm
+                average_total_price_per_sqm = f"{round(float(total_apartments_val / total_apartments_area_val), 2)} PLN" # calculate total average price/sqm
 
                 ctx = {'products': products,
                        'total_apartments_quantity': total_apartments_qty,
@@ -611,11 +775,11 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
                         'average_total_price_per_sqm': average_total_price_per_sqm,
                         'average_sold_price_per_sqm' : average_sold_price_per_sqm,
                         'average_reserved_price_per_sqm' : average_reserved_price_per_sqm,
-                        'average_available_price_per_sqm' : average_available_price_per_sqm,}
-                return render(request, 'SalesAnalysisPerProject.html', ctx)
+                        'average_available_price_per_sqm' : average_available_price_per_sqm,} # pass data to contex
+                return render(request, 'SalesAnalysisPerProject.html', ctx) # push data to html
             else:
                 message = f"No products found!"
-                return render(request, 'SalesAnalysisPerProject.html', {'message': message})
+                return render(request, 'SalesAnalysisPerProject.html', {'message': message}) # push message to html if products not found
 
         elif request.method == "POST" and 'logout' in request.POST:
             logout(request)
