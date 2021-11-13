@@ -19,7 +19,8 @@ from django.urls import path
 from cstmgmnt.views import AddClient, AddSalesPerson, ShowClientData, ShowClient, ShowSalesPerson, ShowSalesPersonData, \
     ValidateUser
 from reports.views import AddProduct, AddInvestmentProject, AddPricingPlan, ShowProduct, ShowProductData, ShowMenu, \
-    ShowInvestment, ShowInvestmentData, AddUser, ShowUser, ShowUserData, SearchApartment, ProjectSalesAnalysis
+    ShowInvestment, ShowInvestmentData, AddUser, ShowUser, ShowUserData, SearchApartment, ProjectSalesAnalysis, \
+    ShowProductByClient
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -44,6 +45,7 @@ urlpatterns = [
     path('productSearch/', SearchApartment.as_view()),
     path('MainMenu/', ShowMenu.as_view()),
     path('salesAnalysis/', ProjectSalesAnalysis.as_view()),
+    path('productByClient/', ShowProductByClient.as_view()),
 
 
 

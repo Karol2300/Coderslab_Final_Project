@@ -4,7 +4,8 @@ from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingP
 
 from django.views import View
 from reports.models import Product, PricingPlan, InvestmentProject
-from cstmgmnt.forms import PickInvestment
+from cstmgmnt.models import Client
+from cstmgmnt.forms import PickInvestment, PickClient
 from django.forms import model_to_dict
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, permission_required
@@ -563,7 +564,9 @@ class ShowMenu(LoginRequiredMixin, View):
                                      "Show User": "http://127.0.0.1:8000/showUser/", },
 
                        'menu_reporting': {"Search Product": "http://127.0.0.1:8000/productSearch/",
-                                     "Project Sales Analysis": "http://127.0.0.1:8000/salesAnalysis/", }
+                                          "Search Product by Client": "http://127.0.0.1:8000/productByClient/",
+                                        "Project Sales Analysis": "http://127.0.0.1:8000/salesAnalysis/",
+                                    }
                        }
 
 
@@ -575,6 +578,7 @@ class ShowMenu(LoginRequiredMixin, View):
                                         "Show Product": "http://127.0.0.1:8000/showProduct/"},
 
                        'menu_reporting': {"Search Product": "http://127.0.0.1:8000/productSearch/",
+                                          "Search Product by Client": "http://127.0.0.1:8000/productByClient/",
                                           "Project Sales Analysis": "http://127.0.0.1:8000/salesAnalysis/", }
                        }
 
@@ -780,6 +784,43 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
             else:
                 message = f"No products found!"
                 return render(request, 'SalesAnalysisPerProject.html', {'message': message}) # push message to html if products not found
+
+        elif request.method == "POST" and 'logout' in request.POST:
+            logout(request)
+            return redirect('/loginPage/')
+
+
+class ShowProductByClient(LoginRequiredMixin, View):
+    """class based view,
+        result : list of products filtered by client,
+        requirements_1 : user must be logged in (LoginRequiredMixin)"""
+
+    def get(self, request):
+        """class  method,
+           result : show pick client and filter form,
+           requirements: user must be logged in (LoginRequiredMixin)"""
+
+        if request.method == 'GET':
+            product_by_client_form = PickClient()
+            ctx = {'product_by_client_form': product_by_client_form,}
+            return render(request, 'ShowProduct_pick_client.html', ctx)
+
+
+    def post(self, request):
+        """class  method,
+           result : show products of client,
+           requirements: user must be logged in (LoginRequiredMixin)"""
+
+        if request.method == "POST" and PickClient(request.POST): #check method and forms
+            client_data = PickClient(request.POST)
+            client = Client.objects.get(pk=client_data.data['name']) #get client from form
+            if client_data.is_valid() and len(client.products.all()) > 0 : # filter validation
+                product = client.products.all()  # get list of products according to filters
+                products = [val for val in product] # convert data into a list
+                return render(request, 'ShowProductbyClient.html', {'products': products, }) # push filtered product list to html
+            else:
+                message = f"No products found!"
+                return render(request, 'ShowProductbyClient.html.html', {'message': message}) # push message if no products found
 
         elif request.method == "POST" and 'logout' in request.POST:
             logout(request)

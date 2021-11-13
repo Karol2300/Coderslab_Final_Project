@@ -413,15 +413,19 @@ class ValidateUser(View):
             username = form['username'].value()
             password = form['password'].value()
             user = authenticate(request, username=username, password=password)
+
             if user is not None:
                 login(request, user)
                 user = request.user
                 if user.is_authenticated:
                     return redirect('/MainMenu/')
+
+            elif request.method == "POST" and 'logout' in request.POST:
+                logout(request)
+                return redirect('/loginPage/')
+
             else:
                 message = 'Niepoprawny login/hasło'
                 return render(request, 'Login.html', {'login_form': LoginForm(), 'message': message})
 
-        if request.method == "POST" and 'logout' in request.POST:
-            logout(request)
-            return redirect('/loginPage/')
+
