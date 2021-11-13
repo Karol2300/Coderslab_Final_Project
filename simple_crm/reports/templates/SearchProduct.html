@@ -6,6 +6,21 @@
 {% block second_action %}
 <form name="pick_investment" method="POST" >
   {% csrf_token %}
+     <table>
+    <tbody>
+        <tr>
+           <td>{{ product_by_investment_form }}</td>
+
+        </tr>
+        <tr>
+             <td>{{ sales_filter_form }}</td>
+        </tr>
+        <tr>
+            <td><button type="submit" name="investment_form"> Submit </button> </td>
+        </tr>
+          </tbody>
+    </table>
+</form>
 
     <table>
             <tbody>
@@ -21,6 +36,9 @@
 </form>
 
 
+{% endblock %}
+{% block info %}
+{{ message }}
 {% endblock %}
 
 

@@ -11,7 +11,7 @@
             <tbody>
                      {% for client in clients %}
                     <tr>
-                        <td> Client id: {{client.id}}</td> <td>City : {{ client.city }}</td> <td><a href="http://127.0.0.1:8000/showClient/{{ client.id }}"> {{ client }}</a></td>
+                        <td> Client id: {{client.id}}</td> <td>City : {{ client.city }}</td>  <td> Client: <a href="http://127.0.0.1:8000/showClient/{{ client.id }}"> {{ client }}</a></td>
                     </tr>
                         {% endfor %}
               </tbody>

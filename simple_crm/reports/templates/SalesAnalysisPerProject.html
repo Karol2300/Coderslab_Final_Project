@@ -1,0 +1,93 @@
+{% extends 'show_data_base.html' %}
+{% block title %} <h1> Simple CRM / Show Client Data  </h1> {% endblock %}
+{% block action %}
+    <h2> Pick product from the list </h2>
+{% endblock %}
+{% block second_action %}
+<form name="pick_investment" method="POST" >
+  {% csrf_token %}
+
+    <table>
+            <tbody>
+                     {% for product in products %}
+                    <tr>
+                        <td> Product id: {{product.id}}</td> <td>Area: {{product.area}}</td>
+                        <td>Floor: {{product.floor}}</td><td>Number of rooms: {{product.number_of_rooms}}</td><td> Status: {{product.status}}</td>
+                        <td>Price: {{product.price}}</td> <td> >> go to product >> <a href="http://127.0.0.1:8000/showProduct/{{ product.id }}"> {{ product }}</a></td>
+                    </tr>
+                        {% endfor %}
+              </tbody>
+        </table>
+</form>
+
+<form name="filter" method="POST" >
+  {% csrf_token %}
+    <table>
+    <tbody>
+            <tr>
+            <td> total apartments quantity : {{ total_apartments_quantity }}</td>
+            <td> sold apartments quantity : {{ sold_apartments_quantity }}</td>
+            <td> reserved apartments quantity : {{ reserved_apartments_quantity }}</td>
+            <td> available apartments quantity : {{ available_apartments_quantity }}</td>
+        </tr>
+        <tr>
+            <tr>
+            <td></td>
+            <td> sold apartments share : {{ sold_products_share }}</td>
+            <td> reserved apartments share : {{ reserved_products_share }}</td>
+            <td> available apartments quantity : {{ available_products_share }}</td>
+
+        </tr>
+        <tr>
+            <td> total apartments area : {{ total_apartments_area }}</td>
+            <td> sold apartments area : {{ sold_apartments_area }}</td>
+            <td> reserved apartments area : {{ reserved_apartments_area }}</td>
+            <td> available apartments area : {{ available_apartments_area }}</td>
+        </tr>
+         <tr>
+            <tr>
+            <td></td>
+            <td> sold apartments area share : {{ sold_apartments_area_share }}</td>
+            <td> reserved apartments area share : {{ reserved_apartments_area_share }}</td>
+            <td> available apartments area share : {{ available_apartments_area_share }}</td>
+        </tr>
+        <tr>
+            <td> total apartments value : {{ total_apartments_val }}</td>
+            <td> sold apartments value : {{ sold_products_val }}</td>
+            <td> reserved apartments value : {{ reserved_products_val }}</td>
+            <td> available apartments value : {{ available_products_val }}</td>
+        </tr>
+        <tr>
+            <td> average total apartments price\sqm : {{ average_total_price_per_sqm }}</td>
+            <td> average sold apartments price\sqm : {{ average_sold_price_per_sqm }}</td>
+            <td> average reserved apartments price\sqm : {{ average_reserved_price_per_sqm }}</td>
+            <td> average available apartments price\sqm : {{ average_available_price_per_sqm }}</td>
+        </tr>
+
+          </tbody>
+    </table>
+</form>
+
+
+
+{% endblock %}
+{% block info %}
+{{ message }}
+{% endblock %}
+
+
+
+                        'total_apartments_val': total_apartments_val,
+                        'sold_products_val': sold_products_area_val,
+                        'reserved_products_val': reserved_products_val,
+                        'available_products_val': available_products_val,
+                        'average_total_price_per_sqm': average_total_price_per_sqm,
+                        'average_sold_price_per_sqm' : average_sold_price_per_sqm,
+                        'average_reserved_price_per_sqm' : average_reserved_price_per_sqm,
+                        'average_available_price_per_sqm' : average_available_price_per_sqm,}
+
+
+
+
+
+

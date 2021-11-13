@@ -46,8 +46,15 @@
             <tr>
             <td> <a href="{{ value }}">{{ key }}</a> </td>
                 {% endfor %}
+                <tr>
+                 <tr><td><h2>{{ menues.6 }}</h2> </td></tr>
+                </tr>
+            {% for key, value in menu_reporting.items %}
+            <tr>
+            <td> <a href="{{ value }}">{{ key }}</a> </td>
+                {% endfor %}
             </tr>
-            </tr>
+
             </tbody>
     </table>
 {% endblock %}
