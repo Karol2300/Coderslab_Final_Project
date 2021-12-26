@@ -1,5 +1,12 @@
 {% extends 'show_data_base.html' %}
-{% block title %} <h1> Simple CRM / Show/Edit/Delete Client  </h1> {% endblock %}
+{% block head %}
+ <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/styles.css">
+     {% block title %}<h1>  Simple CRM / Show Client Data </h1>   {% endblock %}
+ {% endblock %}
+ </head>
+
 {% block action %}
     <h2> Data of Client : </h2>
 {% endblock %}

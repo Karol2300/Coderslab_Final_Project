@@ -1,8 +1,12 @@
 {% extends 'show_data_base.html' %}
-{% block title %} <h1> Simple CRM / Pick Salesperson  </h1> {% endblock %}
-{% block action %}
-    <h2> Pick salesperson from the list </h2>
-{% endblock %}
+
+{% block head %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/styles.css">
+     {% block title %}<h1>  Simple CRM / Choose Salesperson </h1>   {% endblock %}
+ {% endblock %}
+ </head>
 {% block second_action %}
 <form name="pick_salesperson_form" method="POST" >
   {% csrf_token %}

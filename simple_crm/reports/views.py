@@ -555,6 +555,7 @@ class ShowMenu(LoginRequiredMixin, View):
                                        "Show Client": "http://127.0.0.1:8000/showClient/"},
                        'menu_product': {"Add Product": "http://127.0.0.1:8000/addProduct/",
                                         "Show Product": "http://127.0.0.1:8000/showProduct/"},
+
                        'menu_pricing_plan': {"Add Pricing Plan": "http://127.0.0.1:8000/addPricingPlan/"},
                        'menu_investment': {"Show Investment Project": "http://127.0.0.1:8000/showInvestmentProject/",
                                            "Add Investment Project": "http://127.0.0.1:8000/addInvestmentProject/", },
@@ -562,11 +563,12 @@ class ShowMenu(LoginRequiredMixin, View):
                                             "Add Salesperson": "http://127.0.0.1:8000/addSalesPerson/", },
                        'menu_user': {"Add User": "http://127.0.0.1:8000/addUser/",
                                      "Show User": "http://127.0.0.1:8000/showUser/", },
-
                        'menu_reporting': {"Search Product": "http://127.0.0.1:8000/productSearch/",
                                           "Search Product by Client": "http://127.0.0.1:8000/productByClient/",
-                                        "Project Sales Analysis": "http://127.0.0.1:8000/salesAnalysis/",
-                                    }
+                                          "Project Sales Analysis": "http://127.0.0.1:8000/salesAnalysis/",
+                                          },
+
+
                        }
 
 

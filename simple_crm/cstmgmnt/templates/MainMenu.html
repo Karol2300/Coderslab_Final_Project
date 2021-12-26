@@ -1,17 +1,25 @@
 {% extends 'menu_base.html' %}
-{% block title %}  Simple CRM / Main Menu   {% endblock %}
+{% block head %}
+ <head>
+    <meta charset="UTF-8" >
+    <link rel="stylesheet" href="/static/styles.css">
+     {% block title %}<h1>  Simple CRM / Main Menu </h1>   {% endblock %}
+ {% endblock %}
+
 
 {% block menu_1 %}
 
     <table>
             <tbody>
-                <tr><td><h2>{{ menues.0 }}</h2> </td></tr>
+            <div></div>
+            <tr><td><h2>{{ menues.0 }}</h2> </td></tr>
             {% for key, value in menu_client.items %}
             <tr>
             <td> <a href="{{ value }}">{{ key }}</a> </td>
                 {% endfor %}
             </tr>
             </tr>
+            </div>
 
              <tr><td><h2>{{ menues.1 }}</h2> </td></tr>
             {% for key, value in menu_product.items %}

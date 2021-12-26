@@ -1,5 +1,10 @@
 {% extends 'add_data_base.html' %}
-{% block title %} <h1> Simple CRM / Login  </h1> {% endblock title %}
+{% block head %}
+ <head>
+    <meta charset="UTF-8" >
+    <link rel="stylesheet" href="/static/styles.css">
+     {% block title %}<h1>  Simple CRM / Login </h1>   {% endblock %}
+        {% endblock %}
 {% block action %}
 
 <h2> Simple CRM Login Form</h2>
