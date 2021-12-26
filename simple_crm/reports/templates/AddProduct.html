@@ -1,5 +1,13 @@
 {% extends 'add_data_base.html' %}
-{% block title %} <h1> Simple CRM / Add Product  </h1> {% endblock title %}
+{% block head %}
+ <head>
+
+     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/styles.css">
+     {% block title %}<h1>  Simple CRM / Add Product </h1>   {% endblock %}
+
+ </head>
+    {% endblock %}
 {% block action %}
 
 <h2> Please fill new product data</h2>
