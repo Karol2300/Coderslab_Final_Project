@@ -1,7 +1,13 @@
 {% extends 'show_data_base.html' %}
-{% block title %} <h1> Simple CRM / Pick Investment Project  </h1> {% endblock %}
+{% block head %}
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/styles.css">
+     {% block title %}<h1>  Simple CRM / Choose Product </h1>   {% endblock %}
+  </head>
+    {% endblock %}
 {% block action %}
-    <h2> Pick investment from the list </h2>
+    <h2> Choose investment from the list </h2>
 {% endblock %}
 {% block second_action %}
 <form name="pick_investment" method="POST" >

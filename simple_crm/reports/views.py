@@ -693,26 +693,27 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
            result : show sales results per investment
            requirements: user must be logged in (LoginRequiredMixin)"""
 
-
-        # actual_user = request.user
-        # user_id = actual_user.id
-        # user_id_from_investemnt project
-        # if actual_user.is_authenticated:
-        #     ctx_2 = {"username": name}
-        #
-        # else:
-        #     ctx_2 = {"username": "Anonymus User"}
-        # return ctx_2
         if request.method == "POST" and PickInvestment(request.POST):  # check request method and if form in request
             data = PickInvestment(request.POST)  # get data frm form
-            # actual_user = request.user
-            # user_id = actual_user.id
-            # user_id_from_investment =
+
             if data.is_valid() and len(Product.objects.all().filter(
                     investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code')) > 0: # check if form is valid
                 product = Product.objects.all().filter(
                     investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code') # get product data
                 products = [val for val in product] # convert product data to a list
+
+                products_sold = Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).filter(status="sold").order_by('code')
+
+                products_reserved = Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).filter(
+                    status="reserved").order_by('code')
+
+                products_available = Product.objects.all().filter(
+                    investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).filter(
+                    status="available").order_by('code')
+                project_name = data.cleaned_data['investment']
+
 
                 sold_products_qty = len(Product.objects.all().filter(
                     investments= InvestmentProject.objects.get(id=data.cleaned_data['investment'].id),status='sold')) # get sold products qty
@@ -759,7 +760,10 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
                 average_available_price_per_sqm = f"{round(float(available_products_val / available_products_area_val), 2)} PLN" # calculate available apartments average price/sqm
                 average_total_price_per_sqm = f"{round(float(total_apartments_val / total_apartments_area_val), 2)} PLN" # calculate total average price/sqm
 
-                ctx = {'products': products,
+                ctx = {'project': project_name,
+                    'products_sold': products_sold,
+                       'products_reserved': products_reserved,
+                       'products_available': products_available,
                        'total_apartments_quantity': total_apartments_qty,
                        'sold_apartments_quantity': sold_products_qty,
                        'reserved_apartments_quantity': reserved_products_qty,
@@ -782,10 +786,10 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
                         'average_sold_price_per_sqm' : average_sold_price_per_sqm,
                         'average_reserved_price_per_sqm' : average_reserved_price_per_sqm,
                         'average_available_price_per_sqm' : average_available_price_per_sqm,} # pass data to contex
-                return render(request, 'SalesAnalysisPerProject.html', ctx) # push data to html
+                return render(request, 'SalesAnalysisPerProject.html', ctx) # pass data to html
             else:
                 message = f"No products found!"
-                return render(request, 'SalesAnalysisPerProject.html', {'message': message}) # push message to html if products not found
+                return render(request, 'SalesAnalysisPerProject.html', {'message': message}) # pass message to html if products not found
 
         elif request.method == "POST" and 'logout' in request.POST:
             logout(request)
