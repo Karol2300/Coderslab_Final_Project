@@ -1,19 +1,19 @@
 {% extends 'add_data_base.html' %}
-{{% block head %}
+{% block head %}
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
-     {% block title %}<h1>  Simple CRM / Add Investment Project </h1>   {% endblock %}
+     {% block title %}<h1>  Simple CRM / Add Investment Project </h1> <br>  {% endblock %}
   </head>
     {% endblock %}
 
 {% block action %}
-
 <h2> Please fill new investment project data</h2>
 
 {% endblock %}
-
+<br>
 {% block form %}
+<br><br>
     <form method="POST">
         {% csrf_token %}
         <table>
