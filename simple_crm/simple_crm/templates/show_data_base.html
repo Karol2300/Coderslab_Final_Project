@@ -16,12 +16,25 @@
 
 
 </body>
-<br><br>
-<footer> Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}<br><br>
-    <form  method="POST">
+<br>
+<footer>
+   <table>
+       <tbody>
+       <tr>
+           <td> <form  method="POST" id="logout_form">
         {% csrf_token %}
-        <button type="submit" name="logout"> Logout
-        </button>
-    </form>
+        <button type="submit" name="logout"> Logout </button>
+    </form></td><td>
+   <form action="http://127.0.0.1:8000/MainMenu/">
+    <input type="submit" value="Main menu" />
+        </form></td>
+
+       </tr>
+
+   </tbody>
+   </table>
+    <br>
+Logged in as : {{ username  }}<br>{{ application_name }}\{{ version }}\copyrights: {{ copyrights }}\contact: {{ contact }}
 </footer>
+
 </html>

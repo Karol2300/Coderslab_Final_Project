@@ -1,8 +1,10 @@
 {% extends 'show_data_base.html' %}
+{% load static %}
 {% block head %}
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/styles.css">
+
      {% block title %}<h1>  Simple CRM / Project {{ project }} sales analysis  </h1>   {% endblock %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -113,7 +115,7 @@
 {% endblock %}
 {% block second_action %}
 
-
+<img src="{% static 'pie_chart.png' %}" alt="My image">
 
 
 
