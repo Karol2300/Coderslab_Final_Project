@@ -6,8 +6,8 @@
     <link rel="stylesheet" href="/static/styles.css">
 
      {% block title %}<h1>  Simple CRM / Project {{ project }} sales analysis  </h1>   {% endblock %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+
   </head>
     {% endblock %}
 
@@ -18,7 +18,7 @@
              <th> Total apartments qty </th>
             <th> Total apartments area </th>
             <th> Total apartments value </th>
-             <td> Total average apartments price\sqm</td>
+             <th> Total average apartments price\sqm</th>
 
             <tr>
                 <td>{{ total_apartments_quantity }}</td>
@@ -113,9 +113,167 @@
 <br>
 
 {% endblock %}
+
 {% block second_action %}
 
-<img src="{% static 'pie_chart.png' %}" alt="My image">
+
+
+
+
+<table>
+    <tbody>
+
+
+<tr>
+    <td>
+         <div style="width:350px;height:350px">
+                <canvas id="myChart" width="400" height="400"></canvas>
+                    </div>
+    </td>
+
+
+
+        <script>
+        const ctx = document.getElementById('myChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Sold', 'Reserved', 'Available'],
+        datasets: [{
+            label: 'Qty of sold,reserved,available',
+            data: [{{ sold_apartments_quantity }},{{ reserved_apartments_quantity }},{{ available_apartments_quantity }}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+</script>
+
+
+
+                <td>
+                     <div style="width:350px;height:350px">
+              <canvas id="secChart" width="400" height="400"></canvas>
+                </div>
+                </td>
+
+
+<script>
+    const ctx_2 = document.getElementById('secChart').getContext('2d');
+const secChart = new Chart(ctx_2, {
+    type: 'bar',
+    data: {
+        labels: ['Sold', 'Reserved', 'Available'],
+        datasets: [{
+            label: 'Average price',
+            data: [{{ average_sold_price }},{{ average_reserved_price }},{{ average_available_price }}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+</script>
+
+
+
+          <td>
+                     <div style="width:350px;height:350px">
+              <canvas id="thirdChart" width="400" height="400"></canvas>
+                </div>
+                </td>
+            </tr>
+
+<script>
+    const ctx_3 = document.getElementById('thirdChart').getContext('2d');
+const thirdChart = new Chart(ctx_3, {
+    type: 'bar',
+    data: {
+        labels: ['Sold', 'Reserved', 'Available'],
+        datasets: [{
+            label: 'Average price',
+            data: [{{ sold_products_val }},{{ reserved_products_val }},{{ available_products_val }}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+</script>
+
+    </tbody>
+</table>
+<!--<img src="{% static 'pie_chart.png' %}" alt="My image">-->
 
 
 
