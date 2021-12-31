@@ -26,7 +26,8 @@ a {
 }
 
 table {
-  border: 2px solid rgb(218,125,7);
+  border: 2px solid rgb(218,125,7)
+
 
 }
 
@@ -36,6 +37,17 @@ footer {
       font-size: 9;
       color: black
 
+}
+
+#logout {
+              background-color: #4CAF50; /* Green */
+              border: none;
+              color: white;
+              padding: 15px 32px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              font-size: 10px;
 }
 
 

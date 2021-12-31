@@ -10,17 +10,31 @@
     {% endblock %}
 
 {% block action %}
-    <h2> Pick investment from the list </h2>
+    <h2> Select investment project from the list </h2>
 {% endblock %}
 {% block second_action %}
 <form name="pick_investment" method="POST" >
   {% csrf_token %}
     <table>
     <tbody>
+            <th>Name</th>
+            <th>City</th>
+            <th>District</th>
+            <th>Address</th>
+            <th>Number of aparatments</th>
+            <th>Start date</th>
+            <th>Finnish date</th>
+            <th>Specification</th>
             {% for investment in investments %}
         <tr>
-           <td><a href="http://127.0.0.1:8000/showInvestmentProject/{{ investment.id }}"> {{ investment }}</a></td> <td> Number od apartments:: {{ investment.number_of_apartments }}</td>
-                        <td>Start date: {{investment.start_date}}</td><td>Finnish date: {{investment.finnish_date}}</td>
+           <td><a href="http://127.0.0.1:8000/showInvestmentProject/{{ investment.id }}"> {{ investment }}</a></td>
+            <td> {{ investment.city }}</td>
+            <td> {{ investment.district }}</td>
+            <td> {{ investment.address }}</td>
+            <td> {{ investment.number_of_apartments }}</td>
+            <td> {{investment.start_date}}</td>
+            <td> {{investment.finnish_date}}</td>
+            <td> {{investment.specification}}</td>
         </tr>
             {% endfor %}
           </tbody>
@@ -30,7 +44,7 @@
 {% endblock %}
 {% block third_action %}
 <br>
-<form action="http://127.0.0.1:8000/index/">
+<form action="http://127.0.0.1:8000/MainMenu/">
     <input type="submit" value="Main menu" />
 </form>
 <br>

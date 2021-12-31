@@ -1,3 +1,4 @@
+import posix
 from django.shortcuts import render
 from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1, PricingPlanForm_2, \
     EditProductForm_1, EditInvestmentForm, UserForm, UserFormPassword, SalesFilterForm
@@ -12,6 +13,15 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth import logout
 from django.shortcuts import redirect
+import matplotlib.pyplot
+from PIL import Image
+import os
+
+import numpy as np
+# from matplotlib.backends.backend_agg import FigureCanvasAgg
+
+
+
 
 
 class AddProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
@@ -758,10 +768,42 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
                 average_sold_price_per_sqm = f"{round(float(sold_products_val / sold_products_area_val), 2)} PLN" # calculate sold apartments average price/sqm
                 average_reserved_price_per_sqm = f"{round(float(reserved_products_val / reserved_products_area_val), 2)} PLN" # calculate reserved apartments average price/sqm
                 average_available_price_per_sqm = f"{round(float(available_products_val / available_products_area_val), 2)} PLN" # calculate available apartments average price/sqm
-                average_total_price_per_sqm = f"{round(float(total_apartments_val / total_apartments_area_val), 2)} PLN" # calculate total average price/sqm
+                average_total_price_per_sqm = f"{round(float(total_apartments_val / total_apartments_area_val), 2)} PLN" # calculate total average
+
+                average_sold_price = int(sold_products_val / sold_products_area_val)  # calculate sold apartments average price/sqm
+                average_reserved_price = int(reserved_products_val / reserved_products_area_val) # calculate reserved apartments average price/sqm
+                average_available_price = int(available_products_val / available_products_area_val) # calculate available apartments average price/sqm
+                average_total_price = int(total_apartments_val / total_apartments_area_val) # calculate total average price/sqm
+
+
+                labels = 'Sold', 'Reserved', 'Available'
+                areas = [sold_products_area_val, reserved_products_area_val, available_products_area_val]
+                explode = (0.1, 0, 0)
+                ax1 = matplotlib.pyplot.subplot()
+                ax1.pie(areas, explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+                ax1.axis('equal')
+                matplotlib.pyplot.savefig('/home/karol/Coderslab_final_project/simple_crm/cstmgmnt/static/pie_chart.png')
+                p_chart_1 = Image.open('/home/karol/Coderslab_final_project/simple_crm/cstmgmnt/static/pie_chart.png')
+
+                # columns = ['Sold', 'Reserved', 'Available', 'Total']
+                # prices = [average_sold_price, average_reserved_price, average_available_price, average_total_price]
+                # matplotlib.pyplot.bar(range(len(columns)), prices)
+                # matplotlib.pyplot.ylabel("Price per sqm")
+                # matplotlib.pyplot.title("Average prices")
+                # matplotlib.pyplot.xticks(range(len(columns)), columns)
+                # matplotlib.pyplot.savefig('/home/karol/Coderslab_final_project/simple_crm/cstmgmnt/static/bar_chart.png')
+
+
+
+
 
                 ctx = {'project': project_name,
-                    'products_sold': products_sold,
+                       'pie_chart': p_chart_1,
+                       'average_sold_price':average_sold_price,
+                       'average_reserved_price':average_reserved_price,
+                       'average_available_price':average_available_price,
+                       'average_total_price':average_total_price,
+                           'products_sold': products_sold,
                        'products_reserved': products_reserved,
                        'products_available': products_available,
                        'total_apartments_quantity': total_apartments_qty,
