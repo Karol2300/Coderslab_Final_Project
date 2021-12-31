@@ -1,8 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 {% block head %}
 <head>
     <title>{% block title %}  {% endblock %}</title>
+
 </head>
 {% endblock %}
 <body>
@@ -23,10 +26,10 @@
        <tr>
            <td> <form  method="POST" id="logout_form">
         {% csrf_token %}
-        <button type="submit" name="logout"> Logout </button>
+        <button type="submit" name="logout" id="logout"> Logout </button>
     </form></td><td>
    <form action="http://127.0.0.1:8000/MainMenu/">
-    <input type="submit" value="Main menu" />
+    <input type="submit" value="Main menu" id="main_menu" />
         </form></td>
 
        </tr>
