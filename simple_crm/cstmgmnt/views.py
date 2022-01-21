@@ -22,6 +22,7 @@ from reports.forms import LoginForm
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from .models import ClientProductThrough
 
 
 class AddClient(LoginRequiredMixin, PermissionRequiredMixin, View):
@@ -120,9 +121,14 @@ class ShowClient(LoginRequiredMixin, PermissionRequiredMixin, View):
                     client = Client.objects.all().filter(
                         investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('last_name')
                     clients = [val for val in client]
-                    return render(request, 'ShowClient.html', {'clients': clients, })
+                    connected_product = Client.objects.all().filter(
+                        investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('last_name').select_related()
+                    conn_product = [val for val in connected_product]
+
+                    return render(request, 'ShowClient.html', {'clients': clients,
+                                                               'connected_product':conn_product,})
                 else:
-                    message = "There are no clients for chosen investment project !"
+                    message = "There are no clients for selected investment project !"
                     return render(request, 'ShowClient.html', {'message': message})
 
             else:

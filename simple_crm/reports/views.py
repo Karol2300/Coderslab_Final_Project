@@ -1,4 +1,4 @@
-import posix
+
 from django.shortcuts import render
 from reports.forms import ProductForm_1, ProductForm_2, InvestmentForm, PricingPlanForm_1, PricingPlanForm_2, \
     EditProductForm_1, EditInvestmentForm, UserForm, UserFormPassword, SalesFilterForm
@@ -13,11 +13,11 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.contrib.auth import logout
 from django.shortcuts import redirect
-import matplotlib.pyplot
-from PIL import Image
+
+
 import os
 
-import numpy as np
+
 # from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 
@@ -215,10 +215,12 @@ class ShowProduct(LoginRequiredMixin, PermissionRequiredMixin, View):
                 and request.user.has_perm('reports.view_product') and request.user.has_perm('reports.change_product'):
             data = PickInvestment(request.POST)
             if data.is_valid():
+                project_name = data.cleaned_data['investment']
                 product = Product.objects.all().filter(
                     investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code')
                 products = [val for val in product]
-                return render(request, 'ShowProduct.html', {'products': products, })
+                return render(request, 'ShowProduct.html', {'products': products,
+                                                            'project_name': project_name})
             else:
                 message = f"Incorrect Product!"
                 return render(request, 'ShowProduct.html', {'message': message})
@@ -671,7 +673,7 @@ class SearchApartment(LoginRequiredMixin, View):
                     number_of_rooms=filter.data['number_of_rooms'] \
                     ,status=filter.data['status'],floor=filter.data['floor'],area__gt=size[0],area__lte=size[1]).order_by('code') # get list of products according to filters
                 products = [val for val in product] # convert data into a list
-                return render(request, 'SearchProduct.html', {'products': products, }) # push filtered product list to html
+                return render(request, 'SearchProduct.html', {'products': products, }) # push filtered product list to html template
             else:
                 message = f"No products found!"
                 return render(request, 'SearchProduct.html', {'message': message}) # push message if no products found
@@ -708,8 +710,10 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
 
             if data.is_valid() and len(Product.objects.all().filter(
                     investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code')) > 0: # check if form is valid
+
                 product = Product.objects.all().filter(
                     investments=InvestmentProject.objects.get(id=data.cleaned_data['investment'].id)).order_by('code') # get product data
+
                 products = [val for val in product] # convert product data to a list
 
                 products_sold = Product.objects.all().filter(
@@ -765,25 +769,58 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
                 available_products_val = sum([val[0] for val in available_products_value])  # calculate available apartments value
                 total_apartments_val = sold_products_val + reserved_products_val + available_products_val  # calculate total apartments value
 
-                average_sold_price_per_sqm = f"{round(float(sold_products_val / sold_products_area_val), 2)} PLN" # calculate sold apartments average price/sqm
-                average_reserved_price_per_sqm = f"{round(float(reserved_products_val / reserved_products_area_val), 2)} PLN" # calculate reserved apartments average price/sqm
-                average_available_price_per_sqm = f"{round(float(available_products_val / available_products_area_val), 2)} PLN" # calculate available apartments average price/sqm
-                average_total_price_per_sqm = f"{round(float(total_apartments_val / total_apartments_area_val), 2)} PLN" # calculate total average
+                if sold_products_area_val == 0:
+                    average_sold_price_per_sqm = 0
+                else:
+                    average_sold_price_per_sqm = f"{round(float(sold_products_val / sold_products_area_val), 2)} PLN" # calculate sold apartments average price/sqm
 
-                average_sold_price = int(sold_products_val / sold_products_area_val)  # calculate sold apartments average price/sqm
-                average_reserved_price = int(reserved_products_val / reserved_products_area_val) # calculate reserved apartments average price/sqm
-                average_available_price = int(available_products_val / available_products_area_val) # calculate available apartments average price/sqm
-                average_total_price = int(total_apartments_val / total_apartments_area_val) # calculate total average price/sqm
+                if reserved_products_area_val == 0:
+                    average_reserved_price_per_sqm = 0
+                else:
+                    average_reserved_price_per_sqm = f"{round(float(reserved_products_val / reserved_products_area_val), 2)} PLN" # calculate reserved apartments average price/sqm
+
+                if available_products_area_val == 0:
+
+                    average_available_price_per_sqm = 0
+                else:
+                    average_available_price_per_sqm = f"{round(float(available_products_val / available_products_area_val), 2)} PLN" # calculate available apartments average price/sqm
+
+                if total_apartments_area_val == 0:
+                    average_total_price_per_sqm = 0
+                else:
+                    average_total_price_per_sqm = f"{round(float(total_apartments_val / total_apartments_area_val), 2)} PLN" # calculate total average
+
+                if sold_products_area_val == 0:
+                    average_sold_price = 0
+                else:
+                    average_sold_price = int(sold_products_val / sold_products_area_val)  # calculate sold apartments average price/sqm
+
+                if reserved_products_area_val == 0:
+                    average_reserved_price = 0
+                else:
+                    average_reserved_price = int(reserved_products_val / reserved_products_area_val) # calculate reserved apartments average price/sqm
+
+                if available_products_area_val == 0:
+                    average_available_price = 0
+                else:
+                    average_available_price = int(
+                        available_products_val / available_products_area_val)  # calculate available apartments average price/sqm
+
+                if total_apartments_area_val == 0:
+                    average_total_price = 0
+                else:
+
+                    average_total_price = int(total_apartments_val / total_apartments_area_val) # calculate total average price/sqm
 
 
-                labels = 'Sold', 'Reserved', 'Available'
-                areas = [sold_products_area_val, reserved_products_area_val, available_products_area_val]
-                explode = (0.1, 0, 0)
-                ax1 = matplotlib.pyplot.subplot()
-                ax1.pie(areas, explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
-                ax1.axis('equal')
-                matplotlib.pyplot.savefig('/home/karol/Coderslab_final_project/simple_crm/cstmgmnt/static/pie_chart.png')
-                p_chart_1 = Image.open('/home/karol/Coderslab_final_project/simple_crm/cstmgmnt/static/pie_chart.png')
+                # labels = 'Sold', 'Reserved', 'Available'
+                # areas = [sold_products_area_val, reserved_products_area_val, available_products_area_val]
+                # explode = (0.1, 0, 0)
+                # ax1 = matplotlib.pyplot.subplot()
+                # ax1.pie(areas, explode=explode, labels=labels, autopct='%1.1f%%', shadow=True, startangle=90)
+                # ax1.axis('equal')
+                # matplotlib.pyplot.savefig('/home/karol/Coderslab_final_project/simple_crm/cstmgmnt/static/pie_chart.png')
+                # p_chart_1 = Image.open('/home/karol/Coderslab_final_project/simple_crm/cstmgmnt/static/pie_chart.png')
 
                 # columns = ['Sold', 'Reserved', 'Available', 'Total']
                 # prices = [average_sold_price, average_reserved_price, average_available_price, average_total_price]
@@ -798,7 +835,7 @@ class ProjectSalesAnalysis(LoginRequiredMixin, View):
 
 
                 ctx = {'project': project_name,
-                       'pie_chart': p_chart_1,
+                       # 'pie_chart': p_chart_1,
                        'average_sold_price':average_sold_price,
                        'average_reserved_price':average_reserved_price,
                        'average_available_price':average_available_price,
