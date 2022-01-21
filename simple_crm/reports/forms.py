@@ -82,14 +82,20 @@ class UserForm(ModelForm):
         fields = ['username', 'email']
 
 
-class UserFormPassword(forms.Form):
-    password = forms.CharField(max_length=255, widget=PasswordInput)
+class UserFormPassword(forms.ModelForm):
+    password = forms.CharField(max_length=255, widget=forms.PasswordInput)
+
+    class Meta:
+        models = User
+        fields = ['password']
 
 
 class LoginForm(ModelForm):
+    password = password = forms.CharField(max_length=255, widget=forms.PasswordInput)
+
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = ['username']
 
 class SalesFilterForm(forms.Form):
     area_range = forms.ChoiceField(choices=apartment_type)

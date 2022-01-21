@@ -40,14 +40,14 @@ footer {
 }
 
 #logout {
-              background-color: #4CAF50; /* Green */
+              background-color:  rgb(218,125,7);
               border: none;
-              color: white;
-              padding: 15px 32px;
+              color: black;
+              padding: 15px 22px;
               text-align: center;
               text-decoration: none;
               display: inline-block;
-              font-size: 10px;
+              font-size: 12;
 }
 
 

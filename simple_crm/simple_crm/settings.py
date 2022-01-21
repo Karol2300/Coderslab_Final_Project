@@ -88,7 +88,7 @@ DATABASES = {
         'NAME': 'crm_database',
         'HOST': 'localhost',
         'USER': 'postgres',
-        'PASSWORD': 'coderslab',
+        'PASSWORD': 'SecuRa_14_!23',
     }
 }
 
