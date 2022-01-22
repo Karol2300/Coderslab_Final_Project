@@ -11,7 +11,7 @@ Main functions - Client management, product management, user management, product
 
 #3.Technologies:
 ###1.Programming -  language python 3.9
-###2.Django Framework 3.9
+###2.Django Framework 3.2.9
 ###3.Database - PostgreSql
 ###4.CSS
 ###5.HTML
@@ -20,7 +20,7 @@ Main functions - Client management, product management, user management, product
 
 #4.Launch - assuming basic Django framework knowledge
 ###1.install Python 3.9 or higher
-###2.install Django Framework 3.9 or higher
+###2.install Django Framework 3.2.9 or higher
 ###3.install psycopg2binary
 ###4.create database in PostgreSql
 ###5.edit settings.py properly (add database and do not forget about migrations)
